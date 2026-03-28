@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Cormorant_Garamond, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { CartProvider } from '@/context/CartContext'
 import './globals.css'
 
 const cormorant = Cormorant_Garamond({
@@ -15,8 +16,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'AURELIA - Premium Jewelry Collection',
-  description: 'Discover handcrafted luxury jewelry. Rings, necklaces, bracelets, and earrings made with the finest materials.',
+  title: 'TOMIRIS COLLECTION — Ювелирные украшения',
+  description: 'Ювелирные украшения ручной работы: кольца, серьги, браслеты, колье и цепочки из золота 585/750 пробы. Доставка по Казахстану.',
 }
 
 export const viewport: Viewport = {
@@ -29,9 +30,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="ru">
       <body className={`${cormorant.variable} ${inter.variable} font-sans antialiased`}>
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
         <Analytics />
       </body>
     </html>

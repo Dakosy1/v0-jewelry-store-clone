@@ -1,5 +1,4 @@
 import { Navbar } from "@/components/navbar"
-import { CategoryBar } from "@/components/category-bar"
 import { HeroBanner } from "@/components/hero-banner"
 import { ProductCarousel } from "@/components/product-carousel"
 import { BrandStory } from "@/components/brand-story"
@@ -10,8 +9,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
-      <div className="pt-[60px]">
-        <CategoryBar />
+      <div className="pt-20">
         <HeroBanner />
         <ProductCarousel />
         <BrandStory />

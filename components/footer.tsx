@@ -1,99 +1,64 @@
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-secondary">
-      <div className="px-6 lg:px-10 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+    <footer className="bg-black text-white">
+      <div className="px-6 lg:px-10 py-16 lg:py-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Brand */}
-          <div>
-            <h3 className="text-lg tracking-[0.3em] text-foreground font-semibold mb-4">
-              AURELIA
+          <div className="space-y-6">
+            <h3 className="text-xl tracking-[0.4em] font-light font-sans uppercase">
+              TOMIRIS COLLECTION
             </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed font-[family-name:var(--font-inter)]">
-              Handcrafted luxury jewelry for those who appreciate timeless
-              elegance and exceptional craftsmanship.
+            <p className="text-xs text-white/60 leading-relaxed font-sans tracking-wide max-w-[240px]">
+              Эстетика минимализма и высокого искусства в каждом ювелирном украшении. Ручная работа и безупречное качество.
             </p>
           </div>
 
-          {/* Shop */}
-          <div>
-            <h4 className="text-xs tracking-[0.2em] text-foreground mb-4 font-[family-name:var(--font-inter)]">
-              SHOP
-            </h4>
-            <ul className="flex flex-col gap-3">
-              {["Rings", "Necklaces", "Bracelets", "Earrings", "New Arrivals"].map(
-                (item) => (
+          {[
+            {
+              title: 'МАГАЗИН',
+              items: ['Кольца', 'Колье', 'Браслеты', 'Серьги', 'Новинки']
+            },
+            {
+              title: 'КОМПАНИЯ',
+              items: ['О нас', 'Наша история', 'Карьера', 'Пресса', 'Контакты']
+            },
+            {
+              title: 'ПОДДЕРЖКА',
+              items: ['Доставка и возврат', 'Гид по размерам', 'Уход за украшениями', 'FAQ', 'Конфиденциальность']
+            }
+          ].map((column) => (
+            <div key={column.title}>
+              <h4 className="text-[10px] tracking-[0.25em] text-white/40 mb-6 font-sans uppercase">
+                {column.title}
+              </h4>
+              <ul className="flex flex-col gap-4">
+                {column.items.map((item) => (
                   <li key={item}>
                     <a
                       href="#"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors font-[family-name:var(--font-inter)]"
+                      className="text-xs text-white/80 hover:text-white transition-colors font-sans tracking-wide"
                     >
                       {item}
                     </a>
                   </li>
-                )
-              )}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h4 className="text-xs tracking-[0.2em] text-foreground mb-4 font-[family-name:var(--font-inter)]">
-              COMPANY
-            </h4>
-            <ul className="flex flex-col gap-3">
-              {["About Us", "Our Story", "Careers", "Press", "Contact"].map(
-                (item) => (
-                  <li key={item}>
-                    <a
-                      href="#"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors font-[family-name:var(--font-inter)]"
-                    >
-                      {item}
-                    </a>
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h4 className="text-xs tracking-[0.2em] text-foreground mb-4 font-[family-name:var(--font-inter)]">
-              SUPPORT
-            </h4>
-            <ul className="flex flex-col gap-3">
-              {[
-                "Shipping & Returns",
-                "Size Guide",
-                "Care Instructions",
-                "FAQ",
-                "Privacy Policy",
-              ].map((item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors font-[family-name:var(--font-inter)]"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-border px-6 lg:px-10 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p className="text-xs text-muted-foreground font-[family-name:var(--font-inter)]">
-          {'© 2026 AURELIA. All rights reserved.'}
+      <div className="border-t border-white/10 px-6 lg:px-10 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <p className="text-[10px] tracking-wider text-white/40 font-sans">
+          {'© 2026 TOMIRIS COLLECTION. ВСЕ ПРАВА ЗАЩИЩЕНЫ.'}
         </p>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-8">
           {["Instagram", "Pinterest", "Facebook"].map((social) => (
             <a
               key={social}
               href="#"
-              className="text-xs text-muted-foreground hover:text-primary transition-colors font-[family-name:var(--font-inter)]"
+              className="text-[10px] tracking-widest text-white/40 hover:text-white transition-colors font-sans uppercase"
             >
               {social}
             </a>

@@ -16,39 +16,38 @@ export function Newsletter() {
   }
 
   return (
-    <section id="contact" className="py-16 lg:py-24 border-t border-border">
+    <section id="contact" className="py-24 lg:py-32 border-t border-border bg-background">
       <div className="max-w-xl mx-auto text-center px-6">
-        <p className="text-xs tracking-[0.4em] text-primary mb-6 font-[family-name:var(--font-inter)]">
-          STAY CONNECTED
+        <p className="text-[10px] tracking-[0.5em] text-muted-foreground mb-8 font-sans uppercase">
+          ОСТАВАЙТЕСЬ НА СВЯЗИ
         </p>
-        <h2 className="text-3xl md:text-4xl font-light text-foreground mb-4 text-balance">
-          Be the First to Know
+        <h2 className="text-3xl md:text-4xl font-light text-foreground mb-6 text-balance tracking-tight">
+          Будьте первыми в курсе событий
         </h2>
-        <p className="text-base text-muted-foreground mb-10 font-[family-name:var(--font-inter)]">
-          Subscribe to receive updates on new collections, exclusive offers, and
-          the latest from AURELIA.
+        <p className="text-sm text-foreground/60 mb-12 font-sans tracking-wide">
+          Подпишитесь, чтобы получать новости о новых коллекциях, эксклюзивных предложениях и последних новинках от Tomiris Collection.
         </p>
 
         {submitted ? (
-          <p className="text-primary text-sm tracking-[0.1em] font-[family-name:var(--font-inter)]">
-            Thank you for subscribing.
+          <p className="text-foreground text-sm tracking-[0.1em] font-sans">
+            Спасибо за подписку!
           </p>
         ) : (
-          <form onSubmit={handleSubmit} className="flex gap-0">
+          <form onSubmit={handleSubmit} className="flex gap-0 border-b border-black pb-2">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your email address"
+              placeholder="Ваш e-mail"
               required
-              className="flex-1 bg-secondary border border-border px-5 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors font-[family-name:var(--font-inter)]"
+              className="flex-1 bg-transparent px-2 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none font-sans tracking-wide"
             />
             <button
               type="submit"
-              className="bg-primary text-primary-foreground px-6 py-3 hover:bg-gold-dark transition-colors flex items-center gap-2"
-              aria-label="Subscribe"
+              className="text-foreground px-4 py-2 hover:opacity-50 transition-opacity flex items-center gap-2"
+              aria-label="Подписаться"
             >
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-5 w-5" strokeWidth={1} />
             </button>
           </form>
         )}
