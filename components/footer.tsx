@@ -1,4 +1,16 @@
+'use client'
+
+import { useT } from '@/locales'
+
 export function Footer() {
+  const t = useT()
+
+  const columns = [
+    t.footer.shop,
+    t.footer.company,
+    t.footer.support,
+  ]
+
   return (
     <footer className="bg-black text-white">
       <div className="px-6 lg:px-10 py-16 lg:py-24">
@@ -9,24 +21,11 @@ export function Footer() {
               TOMIRIS COLLECTION
             </h3>
             <p className="text-xs text-white/60 leading-relaxed font-sans tracking-wide max-w-[240px]">
-              Эстетика минимализма и высокого искусства в каждом ювелирном украшении. Ручная работа и безупречное качество.
+              {t.footer.description}
             </p>
           </div>
 
-          {[
-            {
-              title: 'МАГАЗИН',
-              items: ['Кольца', 'Колье', 'Браслеты', 'Серьги', 'Новинки']
-            },
-            {
-              title: 'КОМПАНИЯ',
-              items: ['О нас', 'Наша история', 'Карьера', 'Пресса', 'Контакты']
-            },
-            {
-              title: 'ПОДДЕРЖКА',
-              items: ['Доставка и возврат', 'Гид по размерам', 'Уход за украшениями', 'FAQ', 'Конфиденциальность']
-            }
-          ].map((column) => (
+          {columns.map((column) => (
             <div key={column.title}>
               <h4 className="text-[10px] tracking-[0.25em] text-white/40 mb-6 font-sans uppercase">
                 {column.title}
@@ -51,7 +50,7 @@ export function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-white/10 px-6 lg:px-10 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <p className="text-[10px] tracking-wider text-white/40 font-sans">
-          {'© 2026 TOMIRIS COLLECTION. ВСЕ ПРАВА ЗАЩИЩЕНЫ.'}
+          {t.footer.copyright}
         </p>
         <div className="flex items-center gap-8">
           {["Instagram", "Pinterest", "Facebook"].map((social) => (

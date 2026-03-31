@@ -10,10 +10,12 @@ import {
 } from '@/components/ui/sheet'
 import { useCart } from '@/context/CartContext'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
+import { useT } from '@/locales'
 
 export function CartDrawer() {
     const { cart, isOpen, closeCart, removeFromCart, updateQuantity, totalItems, totalPrice } =
         useCart()
+    const t = useT()
 
     const whatsAppLink = buildWhatsAppLink(cart)
 
@@ -28,7 +30,7 @@ export function CartDrawer() {
             <SheetContent side="right" className="w-full sm:max-w-md flex flex-col p-0 bg-background border-l border-border rounded-none shadow-none">
                 <SheetHeader className="px-8 py-6 border-b border-border">
                     <SheetTitle className="text-[10px] tracking-[0.3em] font-medium font-sans uppercase">
-                        КОРЗИНА {totalItems > 0 && `(${totalItems})`}
+                        {t.cart.title} {totalItems > 0 && `(${totalItems})`}
                     </SheetTitle>
                 </SheetHeader>
 
@@ -36,13 +38,13 @@ export function CartDrawer() {
                     <div className="flex-1 flex flex-col items-center justify-center gap-6 px-8 text-center">
                         <ShoppingBag strokeWidth={1} className="h-10 w-10 text-foreground/20" />
                         <p className="text-sm text-foreground/60 font-sans tracking-wide">
-                            Ваша корзина пуста
+                            {t.cart.empty}
                         </p>
                         <button
                             onClick={closeCart}
                             className="text-[10px] tracking-[0.2em] text-foreground underline underline-offset-8 font-sans uppercase"
                         >
-                            ПРОДОЛЖИТЬ ПОКУПКИ
+                            {t.cart.continueShopping}
                         </button>
                     </div>
                 ) : (
@@ -86,7 +88,7 @@ export function CartDrawer() {
                                                     <button
                                                         onClick={() => updateQuantity(product.id, quantity - 1)}
                                                         className="text-muted-foreground hover:text-foreground transition-colors"
-                                                        aria-label="Уменьшить"
+                                                        aria-label={t.cart.decrease}
                                                     >
                                                         <Minus className="h-3 w-3" />
                                                     </button>
@@ -96,7 +98,7 @@ export function CartDrawer() {
                                                     <button
                                                         onClick={() => updateQuantity(product.id, quantity + 1)}
                                                         className="text-muted-foreground hover:text-foreground transition-colors"
-                                                        aria-label="Увеличить"
+                                                        aria-label={t.cart.increase}
                                                     >
                                                         <Plus className="h-3 w-3" />
                                                     </button>
@@ -112,7 +114,7 @@ export function CartDrawer() {
                                         <button
                                             onClick={() => removeFromCart(product.id)}
                                             className="self-start text-muted-foreground hover:text-foreground transition-colors pt-1"
-                                            aria-label="Удалить"
+                                            aria-label={t.cart.remove}
                                         >
                                             <X className="h-4 w-4" />
                                         </button>
@@ -125,7 +127,7 @@ export function CartDrawer() {
                         <div className="border-t border-border px-8 py-8 space-y-6">
                             <div className="flex items-center justify-between">
                                 <span className="text-[10px] tracking-[0.2em] text-muted-foreground font-sans uppercase">
-                                    ИТОГО
+                                    {t.cart.total}
                                 </span>
                                 <span className="text-xl text-foreground font-light font-sans">
                                     {formattedTotal}
@@ -140,7 +142,7 @@ export function CartDrawer() {
                                 className="w-full bg-black text-white py-5 text-[10px] tracking-[0.3em] hover:bg-black/90 transition-colors flex items-center justify-center gap-2 font-sans uppercase shadow-lg shadow-black/10"
                                 onClick={closeCart}
                             >
-                                ОФОРМИТЬ ЧЕРЕЗ WHATSAPP
+                                {t.cart.checkout}
                                 <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                             </a>
 
@@ -148,7 +150,7 @@ export function CartDrawer() {
                                 onClick={closeCart}
                                 className="w-full border border-border text-foreground py-4 text-[10px] tracking-[0.2em] hover:bg-muted transition-colors font-sans uppercase"
                             >
-                                ПРОДОЛЖИТЬ ПОКУПКИ
+                                {t.cart.continueShopping}
                             </button>
                         </div>
                     </>

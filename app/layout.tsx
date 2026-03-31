@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from 'next'
-import { Cormorant_Garamond, Inter } from 'next/font/google'
+import { Commissioner, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { CartProvider } from '@/context/CartContext'
+import { LanguageProvider } from '@/context/LanguageContext'
 import './globals.css'
 
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-cormorant',
+const commissioner = Commissioner({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-commissioner',
 })
 
 const inter = Inter({
@@ -31,10 +31,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${cormorant.variable} ${inter.variable} font-sans antialiased`}>
-        <CartProvider>
-          {children}
-        </CartProvider>
+      <body className={`${commissioner.variable} ${inter.variable} font-sans antialiased`}>
+        <LanguageProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </LanguageProvider>
         <Analytics />
       </body>
     </html>

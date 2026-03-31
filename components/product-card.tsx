@@ -3,15 +3,9 @@
 import Image from 'next/image'
 import { ShoppingBag, Plus } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
+import { useT } from '@/locales'
 import type { Product } from '@/types/product'
 import { cn } from '@/lib/utils'
-
-const metalLabels: Record<string, string> = {
-    gold: 'Жёлтое золото',
-    'rose-gold': 'Розовое золото',
-    silver: 'Серебро',
-    platinum: 'Платина',
-}
 
 interface ProductCardProps {
     product: Product
@@ -22,6 +16,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product, fullWidth, className }: ProductCardProps) {
     const { addToCart } = useCart()
+    const t = useT()
 
     const formattedPrice = new Intl.NumberFormat('ru-KZ', {
         style: 'currency',
@@ -36,6 +31,8 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
             maximumFractionDigits: 0,
         }).format(product.oldPrice)
         : null
+
+    const metalLabel = t.metals[product.metal as keyof typeof t.metals] ?? product.metal
 
     return (
         <a
@@ -78,7 +75,7 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
                         addToCart(product)
                     }}
                     className="absolute bottom-4 right-4 h-10 w-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm"
-                    aria-label="В корзину"
+                    aria-label={t.cart.title}
                 >
                     <Plus className="h-4 w-4" />
                 </button>
@@ -87,7 +84,7 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
             {/* Info */}
             <div className="space-y-1">
                 <p className="text-[10px] tracking-[0.25em] text-muted-foreground font-sans uppercase">
-                    {metalLabels[product.metal]} · {product.purity}
+                    {metalLabel} · {product.purity}
                 </p>
                 <h3 className="text-sm tracking-[0.05em] text-foreground font-sans font-light">
                     {product.nameRu}
