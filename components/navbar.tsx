@@ -5,6 +5,7 @@ import { Search, ShoppingBag, User, Menu, X, ChevronDown } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import { CartDrawer } from '@/components/cart-drawer'
 import { LanguageSwitcher } from '@/components/language-switcher'
+import { AnnouncementBar } from '@/components/announcement-bar'
 import { useT } from '@/locales'
 
 export function Navbar() {
@@ -39,6 +40,7 @@ export function Navbar() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
+        <AnnouncementBar />
         <nav className="flex items-center justify-between px-6 py-5 lg:px-10 h-20">
           <div className="flex items-center gap-6">
             <button

@@ -1,18 +1,14 @@
 import type { Metadata, Viewport } from 'next'
-import { Commissioner, Inter } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { CartProvider } from '@/context/CartContext'
 import { LanguageProvider } from '@/context/LanguageContext'
 import './globals.css'
 
-const commissioner = Commissioner({
+const montserrat = Montserrat({
   subsets: ['latin', 'cyrillic'],
-  variable: '--font-commissioner',
-})
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-montserrat',
+  weight: ['300', '400', '500', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -31,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${commissioner.variable} ${inter.variable} font-sans antialiased`}>
+      <body className={`${montserrat.variable} font-sans antialiased`}>
         <LanguageProvider>
           <CartProvider>
             {children}

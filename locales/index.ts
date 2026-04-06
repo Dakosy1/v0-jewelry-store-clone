@@ -9,7 +9,7 @@ const translations = {
     // Navbar
     nav: {
       catalog: 'КАТАЛОГ',
-      bestsellers: 'ХИТЫ',
+      bestsellers: 'ХИТЫ ПРОДАЖ',
       bestsellersMobile: 'ХИТЫ ПРОДАЖ',
       about: 'О НАС',
       contacts: 'КОНТАКТЫ',

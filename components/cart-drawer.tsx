@@ -123,6 +123,38 @@ export function CartDrawer() {
                             })}
                         </div>
 
+                        {/* Free shipping progress */}
+                        {(() => {
+                            const threshold = 50_000
+                            const remaining = threshold - totalPrice
+                            const progress = Math.min((totalPrice / threshold) * 100, 100)
+                            const formattedRemaining = new Intl.NumberFormat('ru-KZ', {
+                                style: 'currency',
+                                currency: 'KZT',
+                                maximumFractionDigits: 0,
+                            }).format(remaining)
+                            return (
+                                <div className="px-8 py-5 border-t border-border space-y-3">
+                                    {remaining > 0 ? (
+                                        <p className="text-[10px] tracking-[0.15em] text-muted-foreground font-sans">
+                                            До бесплатной доставки осталось{' '}
+                                            <span className="text-foreground font-medium">{formattedRemaining}</span>
+                                        </p>
+                                    ) : (
+                                        <p className="text-[10px] tracking-[0.15em] text-foreground font-sans font-medium">
+                                            Ваша корзина с товарами приедет к вам бесплатно!
+                                        </p>
+                                    )}
+                                    <div className="h-0.5 w-full bg-border overflow-hidden">
+                                        <div
+                                            className="h-full bg-foreground transition-all duration-500"
+                                            style={{ width: `${progress}%` }}
+                                        />
+                                    </div>
+                                </div>
+                            )
+                        })()}
+
                         {/* Footer */}
                         <div className="border-t border-border px-8 py-8 space-y-6">
                             <div className="flex items-center justify-between">

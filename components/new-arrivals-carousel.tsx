@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { ProductCard } from '@/components/product-card'
 import type { Product } from '@/types/product'
 
-export function ProductCarousel() {
+export function NewArrivalsCarousel() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -14,7 +14,7 @@ export function ProductCarousel() {
     fetch('/api/products')
       .then(res => res.json())
       .then(data => {
-        setProducts(data.filter((p: Product) => p.isBestseller))
+        setProducts(data.filter((p: Product) => p.isNew))
         setLoading(false)
       })
   }, [])
@@ -28,11 +28,13 @@ export function ProductCarousel() {
     }
   }
 
+  if (!loading && products.length === 0) return null
+
   return (
-    <section id="bestsellers" className="py-24 lg:py-32 bg-background">
+    <section id="new-arrivals" className="py-24 lg:py-32 bg-secondary/30">
       <div className="flex items-center justify-between px-6 lg:px-10 mb-12">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-foreground tracking-tight">
-          Хиты продаж
+          Новинки
         </h2>
         <div className="flex items-center gap-8">
           <a
@@ -69,12 +71,10 @@ export function ProductCarousel() {
           [1, 2, 3, 4].map(i => (
             <div key={i} className="w-[300px] h-[400px] bg-secondary animate-pulse" />
           ))
-        ) : products.length > 0 ? (
+        ) : (
           products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))
-        ) : (
-          <p className="px-6 text-muted-foreground">Нет доступных товаров</p>
         )}
       </div>
     </section>
