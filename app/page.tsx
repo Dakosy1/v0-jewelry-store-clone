@@ -6,13 +6,17 @@ import { CustomersCarousel } from "@/components/customers-carousel"
 import { BrandStory } from "@/components/brand-story"
 import { Newsletter } from "@/components/newsletter"
 import { Footer } from "@/components/footer"
+import { IntroScreen } from "@/components/intro-screen"
+import { CollectionsSection } from "@/components/collections-section"
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background">
+      <IntroScreen />
       <Navbar />
       <div className="pt-[116px]">
         <HeroBanner />
+        <CollectionsSection />
         <ProductCarousel />
         <NewArrivalsCarousel />
         <CustomersCarousel />

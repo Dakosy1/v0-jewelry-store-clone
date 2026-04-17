@@ -1,14 +1,28 @@
 import type { Metadata, Viewport } from 'next'
-import { Montserrat } from 'next/font/google'
+import { Playfair_Display, Lora, Montserrat } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { CartProvider } from '@/context/CartContext'
 import { LanguageProvider } from '@/context/LanguageContext'
+import { PageTransition } from '@/components/page-transition'
+import { SocialFloat } from '@/components/social-float'
 import './globals.css'
+
+const playfair = Playfair_Display({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-playfair',
+  weight: ['400', '500', '600', '700'],
+})
+
+const lora = Lora({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-lora',
+  weight: ['400', '500', '600'],
+})
 
 const montserrat = Montserrat({
   subsets: ['latin', 'cyrillic'],
   variable: '--font-montserrat',
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600'],
 })
 
 export const metadata: Metadata = {
@@ -27,10 +41,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${montserrat.variable} font-sans antialiased`}>
+      <body className={`${playfair.variable} ${lora.variable} ${montserrat.variable} antialiased`}>
         <LanguageProvider>
           <CartProvider>
-            {children}
+            <PageTransition>
+              {children}
+            </PageTransition>
+            <SocialFloat />
           </CartProvider>
         </LanguageProvider>
         <Analytics />

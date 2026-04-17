@@ -1,193 +1,128 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Plus, Trash2, Edit, Save, X } from 'lucide-react'
-import { Product } from '@/types/product'
-import { CategoryItem } from '@/data/categories'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { AdminNavbar } from '@/components/admin-navbar'
+import Image from 'next/image'
 
-export default function AdminPage() {
+type Product = {
+  id: string
+  nameRu: string
+  price: number
+  images: string[]
+  inStock: boolean
+  isNew: boolean
+  isBestseller: boolean
+  category: { nameRu: string }
+  collection: { nameRu: string } | null
+}
+
+export default function AdminDashboard() {
   const [products, setProducts] = useState<Product[]>([])
-  const [categories, setCategories] = useState<CategoryItem[]>([])
-  const [isAdding, setIsAdding] = useState(false)
-  const [newProduct, setNewProduct] = useState<Partial<Product>>({
-    inStock: true,
-    category: 'rings' as any,
-    metal: 'gold',
-    purity: '585',
-    images: ['/images/products/placeholder.jpg']
-  })
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
-  // Fetch data
-  useEffect(() => {
-    fetch('/api/products').then(res => res.json()).then(setProducts)
-    fetch('/api/categories').then(res => res.json()).then(setCategories)
-  }, [])
+  async function load() {
+    const res = await fetch('/api/admin/products')
+    const data = await res.json()
+    setProducts(Array.isArray(data) ? data : [])
+    setLoading(false)
+  }
 
-  const handleAdd = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const res = await fetch('/api/products', {
-      method: 'POST',
+  useEffect(() => { load() }, [])
+
+  async function archive(id: string) {
+    if (!confirm('Отправить товар в архив?')) return
+    await fetch(`/api/admin/products/${id}`, {
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newProduct)
+      body: JSON.stringify({ status: 'archived' }),
     })
-    if (res.ok) {
-      const added = await res.json()
-      setProducts([...products, added])
-      setIsAdding(false)
-      setNewProduct({
-        inStock: true,
-        category: 'rings' as any,
-        metal: 'gold',
-        purity: '585',
-        images: ['/images/products/placeholder.jpg']
-      })
-    }
+    load()
   }
 
   return (
-    <div className="min-h-screen bg-secondary p-8 font-[family-name:var(--font-inter)]">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-10">
-          <h1 className="text-3xl font-light tracking-tight text-foreground uppercase">Управление магазином</h1>
-          <button 
-            onClick={() => setIsAdding(true)}
-            className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 text-xs tracking-[0.2em] hover:bg-primary/90 transition-colors"
+    <>
+      <AdminNavbar />
+      <main className="px-6 py-8 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-lg font-medium">Активные товары ({products.length})</h1>
+          <button
+            onClick={() => router.push('/admin/products/new')}
+            className="bg-white text-black px-4 py-2 text-sm font-medium hover:bg-zinc-200 transition rounded"
           >
-            <Plus className="h-4 w-4" />
-            ДОБАВИТЬ ТОВАР
+            + Добавить товар
           </button>
         </div>
 
-        {/* Dashboard grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-          <div className="bg-background p-6 border border-border">
-            <p className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase mb-1">Всего товаров</p>
-            <p className="text-2xl font-medium">{products.length}</p>
-          </div>
-          <div className="bg-background p-6 border border-border">
-            <p className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase mb-1">Категорий</p>
-            <p className="text-2xl font-medium">{categories.length}</p>
-          </div>
-        </div>
-
-        {/* Product List */}
-        <div className="bg-background border border-border overflow-hidden">
-          <table className="w-full text-left">
-            <thead className="bg-secondary/50 border-b border-border">
-              <tr>
-                <th className="px-6 py-4 text-[10px] tracking-[0.2em] text-muted-foreground uppercase">Товар</th>
-                <th className="px-6 py-4 text-[10px] tracking-[0.2em] text-muted-foreground uppercase">Категория</th>
-                <th className="px-6 py-4 text-[10px] tracking-[0.2em] text-muted-foreground uppercase">Цена</th>
-                <th className="px-6 py-4 text-[10px] tracking-[0.2em] text-muted-foreground uppercase">Наличие</th>
-                <th className="px-6 py-4"></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border text-sm">
-              {products.map(p => (
-                <tr key={p.id}>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-secondary relative overflow-hidden">
-                        <img src={p.images[0]} alt={p.nameRu} className="object-cover" />
-                      </div>
-                      <div>
-                        <p className="font-medium">{p.nameRu}</p>
-                        <p className="text-[10px] text-muted-foreground uppercase">{p.metal} {p.purity}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 capitalize">{p.category}</td>
-                  <td className="px-6 py-4">{p.price.toLocaleString('ru-KZ')} ₸</td>
-                  <td className="px-6 py-4">
-                    {p.inStock ? (
-                      <span className="text-green-600 text-[10px] tracking-widest font-bold">В НАЛИЧИИ</span>
-                    ) : (
-                      <span className="text-red-500 text-[10px] tracking-widest font-bold">НЕТ</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <button className="text-muted-foreground hover:text-primary mr-3"><Edit className="h-4 w-4" /></button>
-                    <button className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
-                  </td>
+        {loading ? (
+          <div className="text-zinc-500 text-sm">Загрузка...</div>
+        ) : products.length === 0 ? (
+          <div className="text-zinc-500 text-sm py-12 text-center">Товаров нет. Добавьте первый!</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-zinc-800 text-zinc-400 text-left">
+                  <th className="pb-3 pr-4 font-normal">Фото</th>
+                  <th className="pb-3 pr-4 font-normal">Название</th>
+                  <th className="pb-3 pr-4 font-normal">Категория</th>
+                  <th className="pb-3 pr-4 font-normal">Коллекция</th>
+                  <th className="pb-3 pr-4 font-normal">Цена</th>
+                  <th className="pb-3 pr-4 font-normal">Наличие</th>
+                  <th className="pb-3 font-normal">Действия</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Add Modal (Primitive version) */}
-        {isAdding && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div className="bg-background w-full max-w-xl p-8 border border-border shadow-2xl">
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-xl font-light uppercase tracking-widest">Новый товар</h2>
-                <button onClick={() => setIsAdding(false)}><X className="h-5 w-5" /></button>
-              </div>
-              <form onSubmit={handleAdd} className="space-y-6">
-                <div>
-                  <label className="block text-[10px] tracking-widest uppercase text-muted-foreground mb-2">Название (RU)</label>
-                  <input 
-                    type="text" 
-                    required 
-                    className="w-full bg-secondary p-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                    value={newProduct.nameRu || ''}
-                    onChange={e => setNewProduct({...newProduct, nameRu: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, '-')})}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] tracking-widest uppercase text-muted-foreground mb-2">Категория</label>
-                    <select 
-                      className="w-full bg-secondary p-3 text-sm focus:outline-none"
-                      value={newProduct.category}
-                      onChange={e => setNewProduct({...newProduct, category: e.target.value as any})}
-                    >
-                      {categories.map(c => <option key={c.id} value={c.id}>{c.nameRu}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] tracking-widest uppercase text-muted-foreground mb-2">Цена (₸)</label>
-                    <input 
-                      type="number" 
-                      required 
-                      className="w-full bg-secondary p-3 text-sm focus:outline-none"
-                      value={newProduct.price || ''}
-                      onChange={e => setNewProduct({...newProduct, price: Number(e.target.value)})}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] tracking-widest uppercase text-muted-foreground mb-2">Металл</label>
-                    <input 
-                      type="text" 
-                      className="w-full bg-secondary p-3 text-sm"
-                      value={newProduct.metal || ''}
-                      onChange={e => setNewProduct({...newProduct, metal: e.target.value as any})}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] tracking-widest uppercase text-muted-foreground mb-2">Проба</label>
-                    <input 
-                      type="text" 
-                      className="w-full bg-secondary p-3 text-sm"
-                      value={newProduct.purity || ''}
-                      onChange={e => setNewProduct({...newProduct, purity: e.target.value as any})}
-                    />
-                  </div>
-                </div>
-                <button 
-                  type="submit"
-                  className="w-full bg-primary text-primary-foreground py-4 text-xs tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
-                >
-                  <Save className="h-4 w-4" />
-                  СОХРАНИТЬ ТОВАР
-                </button>
-              </form>
-            </div>
+              </thead>
+              <tbody>
+                {products.map(p => (
+                  <tr key={p.id} className="border-b border-zinc-800/50 hover:bg-zinc-900/50">
+                    <td className="py-3 pr-4">
+                      {p.images[0] ? (
+                        <div className="relative w-12 h-12 rounded overflow-hidden bg-zinc-800">
+                          <Image src={p.images[0]} alt={p.nameRu} fill className="object-cover" />
+                        </div>
+                      ) : (
+                        <div className="w-12 h-12 rounded bg-zinc-800 flex items-center justify-center text-zinc-600 text-xs">нет</div>
+                      )}
+                    </td>
+                    <td className="py-3 pr-4">
+                      <div className="font-medium text-white">{p.nameRu}</div>
+                      <div className="flex gap-2 mt-1">
+                        {p.isNew && <span className="text-[10px] bg-blue-900/50 text-blue-300 px-1.5 py-0.5 rounded">NEW</span>}
+                        {p.isBestseller && <span className="text-[10px] bg-amber-900/50 text-amber-300 px-1.5 py-0.5 rounded">ХИТ</span>}
+                      </div>
+                    </td>
+                    <td className="py-3 pr-4 text-zinc-300">{p.category.nameRu}</td>
+                    <td className="py-3 pr-4 text-zinc-300">{p.collection?.nameRu ?? '—'}</td>
+                    <td className="py-3 pr-4 text-zinc-300">{p.price.toLocaleString('ru')} ₸</td>
+                    <td className="py-3 pr-4">
+                      <span className={`text-[11px] px-2 py-1 rounded ${p.inStock ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}`}>
+                        {p.inStock ? 'Есть' : 'Нет'}
+                      </span>
+                    </td>
+                    <td className="py-3">
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => router.push(`/admin/products/${p.id}`)}
+                          className="text-zinc-400 hover:text-white transition text-xs"
+                        >
+                          Изменить
+                        </button>
+                        <button
+                          onClick={() => archive(p.id)}
+                          className="text-zinc-400 hover:text-amber-400 transition text-xs"
+                        >
+                          В архив
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
-      </div>
-    </div>
+      </main>
+    </>
   )
 }

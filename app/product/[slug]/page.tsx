@@ -2,6 +2,7 @@
 
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
+import Link from 'next/link'
 import { ShoppingBag, ArrowLeft } from 'lucide-react'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
@@ -11,24 +12,30 @@ import type { Product } from '@/types/product'
 import { useState, useEffect } from 'react'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export default function ProductPage({ params }: Props) {
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
+  const [slug, setSlug] = useState<string>('')
   const { addToCart } = useCart()
   const t = useT()
 
   useEffect(() => {
+    params.then(p => setSlug(p.slug))
+  }, [params])
+
+  useEffect(() => {
+    if (!slug) return
     fetch('/api/products')
       .then(res => res.json())
       .then(data => {
-        const found = data.find((p: Product) => p.slug === params.slug)
+        const found = Array.isArray(data) ? data.find((p: Product) => p.slug === slug) : null
         setProduct(found || null)
         setLoading(false)
       })
-  }, [params.slug])
+  }, [slug])
 
   if (loading) {
     return (
@@ -76,13 +83,13 @@ export default function ProductPage({ params }: Props) {
             <div className="pt-20">
                 {/* Breadcrumb */}
                 <div className="px-6 lg:px-10 py-5 border-b border-border bg-background">
-                    <a
+                    <Link
                         href="/catalog"
                         className="inline-flex items-center gap-3 text-[10px] tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors font-sans uppercase"
                     >
                         <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.5} />
                         {t.product.backToCatalog}
-                    </a>
+                    </Link>
                 </div>
 
                 <div className="grid lg:grid-cols-2 gap-0 lg:min-h-[80vh] bg-background">

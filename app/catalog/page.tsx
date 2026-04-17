@@ -20,7 +20,7 @@ export default function CatalogPage() {
         fetch('/api/products')
             .then(res => res.json())
             .then(data => {
-                setProducts(data)
+                setProducts(Array.isArray(data) ? data : [])
                 setLoading(false)
             })
     }, [])

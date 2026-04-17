@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Search, ShoppingBag, User, Menu, X, ChevronDown } from 'lucide-react'
+import Link from 'next/link'
+import { Search, ShoppingBag, Menu, X, ChevronDown } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import { CartDrawer } from '@/components/cart-drawer'
 import { LanguageSwitcher } from '@/components/language-switcher'
@@ -50,9 +51,9 @@ export function Navbar() {
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
-            <a href="/" className="text-foreground tracking-[0.2em] text-sm font-medium font-sans">
+            <Link href="/" className="text-foreground tracking-[0.2em] text-sm font-medium font-sans">
               TOMIRIS COLLECTION
-            </a>
+            </Link>
           </div>
 
           {/* Desktop nav */}
@@ -63,7 +64,7 @@ export function Navbar() {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <a
+              <Link
                 href="/catalog"
                 className="flex items-center gap-1 text-[11px] tracking-[0.25em] text-foreground hover:text-muted-foreground transition-colors font-sans font-normal"
               >
@@ -72,7 +73,7 @@ export function Navbar() {
                   className={`h-3 w-3 transition-transform duration-200 ${catalogDropdownOpen ? 'rotate-180' : ''}`}
                   strokeWidth={1.5}
                 />
-              </a>
+              </Link>
 
               {/* Dropdown */}
               {catalogDropdownOpen && (
@@ -84,13 +85,13 @@ export function Navbar() {
                   {/* pointer triangle */}
                   <div className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-background border-l border-t border-border rotate-45" />
                   {t.nav.collections.map(({ label, slug }) => (
-                    <a
+                    <Link
                       key={slug}
-                      href={`/catalog?collection=${slug}`}
+                      href={`/catalog/${slug}`}
                       className="block px-6 py-3 text-[10px] tracking-[0.2em] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors font-sans uppercase"
                     >
                       {label}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               )}
@@ -112,9 +113,7 @@ export function Navbar() {
             <button aria-label={t.nav.search} className="text-foreground hover:text-primary transition-colors">
               <Search className="h-5 w-5" />
             </button>
-            <button aria-label={t.nav.profile} className="text-foreground hover:text-primary transition-colors">
-              <User className="h-5 w-5" />
-            </button>
+
             <button
               aria-label={t.nav.cart}
               className="relative text-foreground hover:text-primary transition-colors"
@@ -148,14 +147,14 @@ export function Navbar() {
               {mobileCatalogOpen && (
                 <div className="flex flex-col gap-3 pl-4 border-l border-border">
                   {t.nav.collections.map(({ label, slug }) => (
-                    <a
+                    <Link
                       key={slug}
-                      href={`/catalog?collection=${slug}`}
+                      href={`/catalog/${slug}`}
                       className="text-xs tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors font-sans"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {label}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               )}

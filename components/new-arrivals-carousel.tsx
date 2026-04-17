@@ -14,7 +14,7 @@ export function NewArrivalsCarousel() {
     fetch('/api/products')
       .then(res => res.json())
       .then(data => {
-        setProducts(data.filter((p: Product) => p.isNew))
+        setProducts(Array.isArray(data) ? data.filter((p: Product) => p.isNew) : [])
         setLoading(false)
       })
   }, [])

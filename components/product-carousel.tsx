@@ -14,7 +14,7 @@ export function ProductCarousel() {
     fetch('/api/products')
       .then(res => res.json())
       .then(data => {
-        setProducts(data.filter((p: Product) => p.isBestseller))
+        setProducts(Array.isArray(data) ? data.filter((p: Product) => p.isBestseller) : [])
         setLoading(false)
       })
   }, [])

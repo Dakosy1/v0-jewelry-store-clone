@@ -1,47 +1,72 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 
-const dbPath = path.join(process.cwd(), 'db.json');
-
-async function getDb() {
-  const data = await fs.readFile(dbPath, 'utf8');
-  return JSON.parse(data);
+function serializeProduct(p: any) {
+  return {
+    ...p,
+    images: JSON.parse(p.images),
+    tags: p.tags ? JSON.parse(p.tags) : undefined,
+  }
 }
 
-async function saveDb(data: any) {
-  await fs.writeFile(dbPath, JSON.stringify(data, null, 2), 'utf8');
-}
-
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const db = await getDb();
-    return NextResponse.json(db.products);
+    const { searchParams } = new URL(request.url)
+    const collection = searchParams.get('collection')
+    const category = searchParams.get('category')
+
+    const where: any = {}
+    if (collection) {
+      const col = await prisma.collection.findUnique({ where: { slug: collection } })
+      if (col) where.collectionId = col.id
+    }
+    if (category) where.categoryId = category
+
+    const products = await prisma.product.findMany({
+      where,
+      include: { category: true, collection: true },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    return NextResponse.json(products.map(serializeProduct))
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+    console.error('[/api/products] Error:', error)
+    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 })
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const db = await getDb();
-    const newProduct = await request.json();
-    
-    // Simple validation
-    if (!newProduct.nameRu || !newProduct.price) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    const body = await request.json()
+
+    if (!body.nameRu || !body.price || !body.categoryId || !body.metal || !body.purity) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // Generate ID if missing
-    if (!newProduct.id) {
-      newProduct.id = `idx_${Date.now()}`;
-    }
+    const product = await prisma.product.create({
+      data: {
+        id: body.id ?? `idx_${Date.now()}`,
+        slug: body.slug ?? body.nameRu.toLowerCase().replace(/\s+/g, '-'),
+        nameRu: body.nameRu,
+        price: body.price,
+        oldPrice: body.oldPrice ?? null,
+        metal: body.metal,
+        purity: body.purity,
+        stone: body.stone ?? null,
+        weight: body.weight ?? null,
+        images: JSON.stringify(body.images ?? []),
+        description: body.description ?? '',
+        tags: body.tags ? JSON.stringify(body.tags) : null,
+        inStock: body.inStock ?? true,
+        isNew: body.isNew ?? false,
+        isBestseller: body.isBestseller ?? false,
+        categoryId: body.categoryId,
+        collectionId: body.collectionId ?? null,
+      },
+    })
 
-    db.products.push(newProduct);
-    await saveDb(db);
-    
-    return NextResponse.json(newProduct, { status: 201 });
+    return NextResponse.json(serializeProduct(product), { status: 201 })
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to create product' }, { status: 500 })
   }
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import Image from "next/image"
+import Link from "next/link"
 import { useT } from "@/locales"
 
 export function BrandStory() {
@@ -9,12 +10,13 @@ export function BrandStory() {
   return (
     <section id="about" className="py-24 lg:py-32 border-t border-border bg-background">
       <div className="grid lg:grid-cols-2 gap-0 overflow-hidden">
-        <div className="relative aspect-square lg:aspect-auto min-h-[400px]">
+        <div className="flex items-center justify-center bg-stone-50">
           <Image
-            src="/images/brand.jpg"
+            src="/images/photosession/GK2A9729.JPG"
             alt={t.brand.imageAlt}
-            fill
-            className="object-cover"
+            width={800}
+            height={1067}
+            className="w-full h-auto object-contain"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
         </div>
@@ -30,12 +32,12 @@ export function BrandStory() {
             <p>{t.brand.p2}</p>
           </div>
           <div className="mt-12">
-            <a
+            <Link
               href="/catalog"
               className="inline-block border border-black text-black px-10 py-4 text-[10px] tracking-[0.3em] hover:bg-black hover:text-white transition-all duration-300 font-sans uppercase"
             >
               {t.brand.cta}
-            </a>
+            </Link>
           </div>
         </div>
       </div>

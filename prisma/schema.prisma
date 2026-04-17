@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Collection {
+  id        String    @id @default(cuid())
+  slug      String    @unique
+  nameRu    String
+  nameEn    String
+  nameKk    String
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Category {
+  id        String    @id
+  slug      String    @unique
+  nameRu    String
+  nameEn    String
+  nameKk    String
+  products  Product[]
+}
+
+model Product {
+  id           String      @id
+  slug         String      @unique
+  nameRu       String
+  price        Int
+  oldPrice     Int?
+  metal        String
+  purity       String
+  stone        String?
+  weight       Float?
+  images       String      // JSON array as string
+  description  String
+  tags         String?     // JSON array as string
+  inStock      Boolean     @default(true)
+  isNew        Boolean     @default(false)
+  isBestseller Boolean     @default(false)
+  status       String      @default("active") // "active" | "archived"
+  categoryId   String
+  category     Category    @relation(fields: [categoryId], references: [id])
+  collectionId String?
+  collection   Collection? @relation(fields: [collectionId], references: [id])
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
