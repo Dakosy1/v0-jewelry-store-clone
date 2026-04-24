@@ -1,78 +1,85 @@
 'use client'
 
-import { useRef } from 'react'
-import Image from 'next/image'
+import { useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { customerPhotos } from '@/data/customers'
+
+const REELS = [
+  'DNVxZAiM35J',
+  'DNibXgMsuUk',
+  'DJR4X1gM-Qe',
+  'DJPeELPsnth',
+  'DIqHRiFz1Oi',
+  'DVd2iDCjFdB',
+]
+
+function mod(n: number, m: number) {
+  return ((n % m) + m) % m
+}
 
 export function CustomersCarousel() {
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const [start, setStart] = useState(0)
+  const total = REELS.length
 
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -320 : 320,
-        behavior: 'smooth',
-      })
-    }
-  }
+  const next = () => setStart(s => mod(s + 1, total))
+  const prev = () => setStart(s => mod(s - 1, total))
+
+  const visibleReels = Array.from({ length: 5 }, (_, i) =>
+    REELS[mod(start + i, total)]
+  )
 
   return (
     <section id="our-clients" className="py-24 lg:py-32 bg-background">
-      {/* Centered title */}
-      <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-light text-foreground tracking-tight mb-12">
+      <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-light tracking-tight mb-16">
         Наши клиенты
       </h2>
 
-      {/* Carousel with overlaid arrows */}
-      <div className="relative">
-        {/* Left arrow */}
+      <div className="flex items-center gap-3 px-16 xl:px-24">
         <button
-          onClick={() => scroll('left')}
-          className="absolute left-3 top-1/2 -translate-y-1/2 z-10 h-10 w-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:bg-white transition-colors"
+          onClick={prev}
+          className="shrink-0 h-10 w-10 rounded-full border border-black/10 bg-white shadow-sm hover:shadow-md flex items-center justify-center transition-all"
           aria-label="Назад"
         >
-          <ChevronLeft className="h-4 w-4 text-black" strokeWidth={1.5} />
+          <ChevronLeft className="h-4 w-4" strokeWidth={1.5} />
         </button>
 
-        {/* Right arrow */}
+        {visibleReels.map((reelId) => (
+          <div
+            key={reelId}
+            className="flex-1 rounded-2xl overflow-hidden shadow-md"
+            style={{ aspectRatio: '9/16' }}
+          >
+            <iframe
+              src={`https://www.instagram.com/reel/${reelId}/embed/`}
+              className="w-full h-full border-0"
+              scrolling="no"
+              allowFullScreen
+              title={`Reel ${reelId}`}
+            />
+          </div>
+        ))}
+
         <button
-          onClick={() => scroll('right')}
-          className="absolute right-3 top-1/2 -translate-y-1/2 z-10 h-10 w-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:bg-white transition-colors"
+          onClick={next}
+          className="shrink-0 h-10 w-10 rounded-full border border-black/10 bg-white shadow-sm hover:shadow-md flex items-center justify-center transition-all"
           aria-label="Вперёд"
         >
-          <ChevronRight className="h-4 w-4 text-black" strokeWidth={1.5} />
+          <ChevronRight className="h-4 w-4" strokeWidth={1.5} />
         </button>
+      </div>
 
-        {/* Scrollable strip */}
-        <div
-          ref={scrollRef}
-          className="flex overflow-x-auto gap-1"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {customerPhotos.map((customer) => (
-            <div key={customer.id} className="relative shrink-0 w-[calc(100%/2.2)] md:w-[calc(100%/3.5)] lg:w-[calc(100%/5.2)]">
-              <div className="relative aspect-[3/4] overflow-hidden bg-secondary">
-                <Image
-                  src={customer.image}
-                  alt={customer.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 50vw, 20vw"
-                  unoptimized={customer.image.endsWith('.gif')}
-                />
-                {/* Text overlay at bottom */}
-                {customer.caption && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-3 py-4">
-                    <p className="text-white text-[9px] tracking-[0.15em] uppercase font-sans leading-tight">
-                      {customer.caption}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="flex justify-center gap-2 mt-8">
+        {REELS.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setStart(i)}
+            className="rounded-full transition-all duration-300"
+            style={{
+              width: i === start ? 24 : 8,
+              height: 8,
+              background: i === start ? '#111' : '#ddd',
+            }}
+          />
+        ))}
       </div>
     </section>
   )
