@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { Suspense, useState, useMemo, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { ProductCard } from '@/components/product-card'
@@ -9,27 +10,29 @@ import { useT } from '@/locales'
 import { useLanguage } from '@/context/LanguageContext'
 import type { Category, Product } from '@/types/product'
 
-export default function CatalogPage() {
+function CatalogContent() {
     const [products, setProducts] = useState<Product[]>([])
     const [loading, setLoading] = useState(true)
     const [activeCategory, setActiveCategory] = useState<Category | 'all'>('all')
     const t = useT()
     const { locale } = useLanguage()
+    const searchParams = useSearchParams()
+    const isSale = searchParams.get('sale') === '1'
 
     useEffect(() => {
-        fetch('/api/products')
+        setLoading(true)
+        const url = isSale ? '/api/products?sale=1' : '/api/products'
+        fetch(url)
             .then(res => res.json())
-            .then(data => {
-                setProducts(Array.isArray(data) ? data : [])
-                setLoading(false)
-            })
-    }, [])
+            .then(data => setProducts(Array.isArray(data) ? data : []))
+            .catch(() => setProducts([]))
+            .finally(() => setLoading(false))
+    }, [isSale])
 
     const filtered = useMemo(
-        () =>
-            activeCategory === 'all'
-                ? products
-                : products.filter((p) => p.category === activeCategory),
+        () => activeCategory === 'all'
+            ? products
+            : products.filter((p) => p.category === activeCategory),
         [activeCategory, products]
     )
 
@@ -40,20 +43,19 @@ export default function CatalogPage() {
     }
 
     return (
-        <main className="min-h-screen bg-background">
-            <Navbar />
-            <div className="pt-20">
-                {/* Header */}
-                <section className="border-b border-border py-16 px-6 lg:px-10 text-center bg-background">
-                    <p className="text-[10px] tracking-[0.5em] text-muted-foreground mb-4 font-sans uppercase">
-                        {t.catalog.label}
-                    </p>
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-foreground tracking-tight font-serif">
-                        {t.catalog.heading}
-                    </h1>
-                </section>
+        <div className="pt-20">
+            {/* Header */}
+            <section className="border-b border-border py-16 px-6 lg:px-10 text-center bg-background">
+                <p className="text-[10px] tracking-[0.5em] text-muted-foreground mb-4 font-sans uppercase">
+                    {isSale ? t.nav.discounts : t.catalog.label}
+                </p>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-foreground tracking-tight font-serif">
+                    {isSale ? t.nav.discounts : t.catalog.heading}
+                </h1>
+            </section>
 
-                {/* Category filter */}
+            {/* Category filter — скрываем в режиме скидок */}
+            {!isSale && (
                 <section className="border-b border-border bg-background px-6 lg:px-10 py-6 overflow-x-auto sticky top-20 z-40">
                     <div className="flex justify-center gap-10 min-w-max">
                         <button
@@ -79,30 +81,37 @@ export default function CatalogPage() {
                         ))}
                     </div>
                 </section>
+            )}
 
-                {/* Grid */}
-                <section className="px-6 lg:px-10 py-16 bg-background">
-                    {loading ? (
-                        <div className="flex justify-center items-center py-24">
-                            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-black"></div>
-                        </div>
-                    ) : filtered.length === 0 ? (
-                        <p className="text-muted-foreground text-center py-24 font-sans tracking-wide">
-                            {t.catalog.empty}
-                        </p>
-                    ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
-                            {filtered.map((product) => (
-                                <ProductCard
-                                    key={product.id}
-                                    product={product}
-                                    fullWidth
-                                />
-                            ))}
-                        </div>
-                    )}
-                </section>
-            </div>
+            {/* Grid */}
+            <section className="px-6 lg:px-10 py-16 bg-background">
+                {loading ? (
+                    <div className="flex justify-center items-center py-24">
+                        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-black" />
+                    </div>
+                ) : filtered.length === 0 ? (
+                    <p className="text-muted-foreground text-center py-24 font-sans tracking-wide">
+                        {t.catalog.empty}
+                    </p>
+                ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+                        {filtered.map((product) => (
+                            <ProductCard key={product.id} product={product} fullWidth />
+                        ))}
+                    </div>
+                )}
+            </section>
+        </div>
+    )
+}
+
+export default function CatalogPage() {
+    return (
+        <main className="min-h-screen bg-background">
+            <Navbar />
+            <Suspense fallback={<div className="pt-20 flex justify-center py-24"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-black" /></div>}>
+                <CatalogContent />
+            </Suspense>
             <Footer />
         </main>
     )

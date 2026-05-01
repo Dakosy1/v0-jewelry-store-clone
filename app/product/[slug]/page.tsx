@@ -8,8 +8,9 @@ import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { useCart } from '@/context/CartContext'
 import { useT } from '@/locales'
-import type { Product } from '@/types/product'
+import type { Product, ProductColor } from '@/types/product'
 import { useState, useEffect } from 'react'
+import { getProductColorLabel, getProductColorSwatch } from '@/lib/product-colors'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -19,6 +20,7 @@ export default function ProductPage({ params }: Props) {
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [slug, setSlug] = useState<string>('')
+  const [selectedColor, setSelectedColor] = useState<ProductColor | null>(null)
   const { addToCart } = useCart()
   const t = useT()
 
@@ -33,8 +35,10 @@ export default function ProductPage({ params }: Props) {
       .then(data => {
         const found = Array.isArray(data) ? data.find((p: Product) => p.slug === slug) : null
         setProduct(found || null)
-        setLoading(false)
+        setSelectedColor(found?.selectedColor ?? found?.colors?.[0] ?? null)
       })
+      .catch(() => setProduct(null))
+      .finally(() => setLoading(false))
   }, [slug])
 
   if (loading) {
@@ -67,8 +71,12 @@ export default function ProductPage({ params }: Props) {
 
     const metalLabel = t.metals[product.metal as keyof typeof t.metals] ?? product.metal
     const stoneLabel = product.stone ? (t.stones[product.stone as keyof typeof t.stones] ?? product.stone) : null
+    const getLocalizedColorLabel = (color: ProductColor) =>
+        t.productColors[color as keyof typeof t.productColors] ?? getProductColorLabel(color)
 
     const specs = [
+        { label: t.product.barcode, value: product.barcode },
+        ...(selectedColor ? [{ label: t.product.selectedColor, value: getLocalizedColorLabel(selectedColor) }] : []),
         { label: t.product.specs.metal, value: metalLabel },
         { label: t.product.specs.purity, value: `${product.purity}` },
         ...(product.stone && product.stone !== 'none'
@@ -142,6 +150,36 @@ export default function ProductPage({ params }: Props) {
                         </div>
 
                         {/* Specs */}
+                        {product.colors.length > 0 && selectedColor && (
+                            <div className="mb-8">
+                                <p className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase font-sans mb-3">
+                                    {t.product.colorOptions}
+                                </p>
+                                <div className="flex flex-wrap gap-3">
+                                    {product.colors.map((color) => {
+                                        const active = selectedColor === color
+                                        return (
+                                            <button
+                                                key={color}
+                                                type="button"
+                                                onClick={() => setSelectedColor(color)}
+                                                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs transition ${active
+                                                    ? 'border-foreground bg-foreground text-background'
+                                                    : 'border-border text-foreground hover:border-foreground/50'
+                                                    }`}
+                                            >
+                                                <span
+                                                    className="h-4 w-4 rounded-full border border-black/10"
+                                                    style={{ backgroundColor: getProductColorSwatch(color) }}
+                                                />
+                                                {getLocalizedColorLabel(color)}
+                                            </button>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        )}
+
                         <div className="border border-border divide-y divide-border mb-10">
                             {specs.map(({ label, value }) => (
                                 <div key={label} className="flex justify-between px-5 py-4">
@@ -163,7 +201,7 @@ export default function ProductPage({ params }: Props) {
                         {/* Add to cart */}
                         {product.inStock ? (
                             <button
-                                onClick={() => addToCart(product)}
+                                onClick={() => addToCart({ ...product, selectedColor: selectedColor ?? product.colors[0] })}
                                 className="flex items-center justify-center gap-3 bg-black text-white py-5 text-[10px] tracking-[0.3em] hover:bg-black/80 transition-all duration-300 font-sans uppercase shadow-xl shadow-black/5"
                             >
                                 <ShoppingBag className="h-4 w-4" strokeWidth={1.5} />

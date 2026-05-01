@@ -33,7 +33,7 @@ export default function AdminLogin() {
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-white text-xl font-light tracking-[0.2em]">TOMIRIS</h1>
+          <h1 className="text-white text-xl font-light tracking-[0.2em]">TOMIRIS COLLECTION ASTANA</h1>
           <p className="text-zinc-500 text-xs tracking-widest mt-1">ADMIN PANEL</p>
         </div>
 

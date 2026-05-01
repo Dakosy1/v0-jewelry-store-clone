@@ -7,13 +7,6 @@ import { useCart } from '@/context/CartContext'
 import { useT } from '@/locales'
 import type { Product } from '@/types/product'
 
-const metalColors: Record<string, string> = {
-  gold: '#D4AF37',
-  'rose-gold': '#C08080',
-  silver: '#C0C0C0',
-  platinum: '#E0E0E8',
-}
-
 interface ProductModalProps {
   product: Product
   onClose: () => void
@@ -72,7 +65,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-20 h-8 w-8 flex items-center justify-center bg-background/90 hover:bg-secondary transition-colors"
-          aria-label="Закрыть"
+          aria-label={t.product.close}
         >
           <X className="h-4 w-4" />
         </button>
@@ -122,38 +115,30 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
             )}
           </div>
 
-          {/* Metal color swatch */}
-          <div className="flex flex-col gap-2">
-            <p className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase font-sans">
-              Цвет металла
-            </p>
-            <div className="flex gap-2">
-              <div
-                className="w-6 h-6 rounded-full ring-2 ring-offset-2 ring-foreground border border-border/50"
-                style={{ backgroundColor: metalColors[product.metal] ?? '#ccc' }}
-                title={metalLabel}
-              />
-            </div>
-          </div>
-
           {/* Specs */}
           <div className="border border-border divide-y divide-border">
             <div className="flex justify-between px-4 py-3">
               <span className="text-[10px] tracking-[0.1em] text-muted-foreground uppercase font-sans">
-                Металл
+                {t.product.barcode}
+              </span>
+              <span className="text-xs text-foreground font-sans">{product.barcode}</span>
+            </div>
+            <div className="flex justify-between px-4 py-3">
+              <span className="text-[10px] tracking-[0.1em] text-muted-foreground uppercase font-sans">
+                {t.product.specs.metal}
               </span>
               <span className="text-xs text-foreground font-sans">{metalLabel}</span>
             </div>
             <div className="flex justify-between px-4 py-3">
               <span className="text-[10px] tracking-[0.1em] text-muted-foreground uppercase font-sans">
-                Проба
+                {t.product.specs.purity}
               </span>
               <span className="text-xs text-foreground font-sans">{product.purity}</span>
             </div>
             {stoneLabel && (
               <div className="flex justify-between px-4 py-3">
                 <span className="text-[10px] tracking-[0.1em] text-muted-foreground uppercase font-sans">
-                  Камень
+                  {t.product.specs.stone}
                 </span>
                 <span className="text-xs text-foreground font-sans">{stoneLabel}</span>
               </div>
@@ -161,9 +146,9 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
             {product.weight && (
               <div className="flex justify-between px-4 py-3">
                 <span className="text-[10px] tracking-[0.1em] text-muted-foreground uppercase font-sans">
-                  Вес
+                  {t.product.specs.weight}
                 </span>
-                <span className="text-xs text-foreground font-sans">{product.weight} г</span>
+                <span className="text-xs text-foreground font-sans">{product.weight} {t.product.specs.grams}</span>
               </div>
             )}
           </div>
@@ -184,11 +169,11 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
                 className="flex items-center justify-center gap-3 bg-black text-white py-4 text-[10px] tracking-[0.3em] hover:bg-black/80 transition-all font-sans uppercase"
               >
                 <ShoppingBag className="h-4 w-4" strokeWidth={1.5} />
-                В корзину
+                {t.product.addToCart}
               </button>
             ) : (
               <div className="py-4 text-center text-[10px] tracking-[0.2em] text-muted-foreground border border-border font-sans uppercase">
-                Нет в наличии
+                {t.product.outOfStock}
               </div>
             )}
 
@@ -196,7 +181,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
               href={`/product/${product.slug}`}
               className="flex items-center justify-center gap-2 py-3 text-[10px] tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors font-sans uppercase border border-border"
             >
-              Подробнее
+              {t.product.details}
               <ArrowRight className="h-3 w-3" />
             </a>
           </div>

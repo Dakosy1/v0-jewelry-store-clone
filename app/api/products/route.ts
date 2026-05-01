@@ -1,12 +1,16 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-
 function serializeProduct(p: any) {
   return {
     ...p,
+    colors: [],
     images: JSON.parse(p.images),
     tags: p.tags ? JSON.parse(p.tags) : undefined,
   }
+}
+
+function isValidBarcode(value: unknown): value is string {
+  return typeof value === 'string' && /^\d{4}$/.test(value)
 }
 
 export async function GET(request: Request) {
@@ -14,13 +18,15 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const collection = searchParams.get('collection')
     const category = searchParams.get('category')
+    const sale = searchParams.get('sale')
 
-    const where: any = {}
+    const where: any = { status: 'active' }
     if (collection) {
       const col = await prisma.collection.findUnique({ where: { slug: collection } })
       if (col) where.collectionId = col.id
     }
     if (category) where.categoryId = category
+    if (sale === '1') where.oldPrice = { not: null }
 
     const products = await prisma.product.findMany({
       where,
@@ -39,7 +45,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json()
 
-    if (!body.nameRu || !body.price || !body.categoryId || !body.metal || !body.purity) {
+    if (!body.nameRu || !body.price || !body.categoryId || !body.metal || !body.purity || !isValidBarcode(body.barcode)) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
@@ -47,6 +53,7 @@ export async function POST(request: Request) {
       data: {
         id: body.id ?? `idx_${Date.now()}`,
         slug: body.slug ?? body.nameRu.toLowerCase().replace(/\s+/g, '-'),
+        barcode: body.barcode,
         nameRu: body.nameRu,
         price: body.price,
         oldPrice: body.oldPrice ?? null,

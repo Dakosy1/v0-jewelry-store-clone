@@ -9,11 +9,13 @@ export async function POST(request: NextRequest) {
   }
 
   const token = await signToken()
+  const forwardedProto = request.headers.get('x-forwarded-proto')
+  const isHttps = forwardedProto === 'https' || request.nextUrl.protocol === 'https:'
 
   const response = NextResponse.json({ ok: true })
   response.cookies.set('admin_token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: isHttps,
     sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 7, // 7 дней
     path: '/',

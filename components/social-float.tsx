@@ -1,8 +1,6 @@
 'use client'
 
-const WHATSAPP_URL = 'https://wa.me/77001234567'
-const INSTAGRAM_URL = 'https://instagram.com/tomiris.collection'
-const TELEGRAM_URL = 'https://t.me/tomiris_collection'
+import { INSTAGRAM_URL, TELEGRAM_URL, WHATSAPP_URL } from '@/lib/social-links'
 
 const links = [
   {

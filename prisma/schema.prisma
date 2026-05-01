@@ -30,10 +30,12 @@ model Category {
 model Product {
   id           String      @id
   slug         String      @unique
+  barcode      String
   nameRu       String
   price        Int
   oldPrice     Int?
   metal        String
+  colors       String
   purity       String
   stone        String?
   weight       Float?

@@ -21,12 +21,14 @@ export function Navbar() {
     { href: '/#bestsellers', label: t.nav.bestsellers },
     { href: '/#about', label: t.nav.about },
     { href: '/#contact', label: t.nav.contacts },
+    { href: '/catalog?sale=1', label: t.nav.discounts },
   ]
 
   const otherMobileLinks = [
     { href: '/#bestsellers', label: t.nav.bestsellersMobile },
     { href: '/#about', label: t.nav.about },
     { href: '/#contact', label: t.nav.contacts },
+    { href: '/catalog?sale=1', label: t.nav.discounts },
   ]
 
   const handleMouseEnter = () => {
@@ -51,8 +53,8 @@ export function Navbar() {
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
-            <Link href="/" className="text-foreground tracking-[0.2em] text-sm font-medium font-sans">
-              TOMIRIS COLLECTION
+            <Link href="/" className="text-foreground tracking-[0.12em] sm:tracking-[0.2em] text-[10px] sm:text-sm font-medium font-sans leading-tight">
+              TOMIRIS COLLECTION ASTANA
             </Link>
           </div>
 
@@ -78,7 +80,7 @@ export function Navbar() {
               {/* Dropdown */}
               {catalogDropdownOpen && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-background border border-border shadow-lg min-w-[240px] py-2 z-50"
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-background border border-border shadow-lg w-[360px] py-2 z-50"
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
                 >

@@ -75,7 +75,7 @@ export function CartDrawer() {
                                         <div className="flex-1 flex flex-col justify-between py-1">
                                             <div>
                                                 <p className="text-[9px] tracking-[0.2em] text-muted-foreground mb-1 font-sans uppercase">
-                                                    {product.purity} · {product.metal}
+                                                    {product.purity} · {t.metals[product.metal as keyof typeof t.metals] ?? product.metal}
                                                 </p>
                                                 <h4 className="text-xs tracking-wide text-foreground font-sans font-light">
                                                     {product.nameRu}
@@ -137,12 +137,12 @@ export function CartDrawer() {
                                 <div className="px-8 py-5 border-t border-border space-y-3">
                                     {remaining > 0 ? (
                                         <p className="text-[10px] tracking-[0.15em] text-muted-foreground font-sans">
-                                            До бесплатной доставки осталось{' '}
+                                            {t.cart.freeShippingRemaining}{' '}
                                             <span className="text-foreground font-medium">{formattedRemaining}</span>
                                         </p>
                                     ) : (
                                         <p className="text-[10px] tracking-[0.15em] text-foreground font-sans font-medium">
-                                            Ваша корзина с товарами приедет к вам бесплатно!
+                                            {t.cart.freeShippingUnlocked}
                                         </p>
                                     )}
                                     <div className="h-0.5 w-full bg-border overflow-hidden">

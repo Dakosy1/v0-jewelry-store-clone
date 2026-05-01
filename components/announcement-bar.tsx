@@ -1,17 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-
-const messages = [
-  'Бесплатная доставка от 50 000 ₸',
-  'Распродажа — скидки до 30%',
-  'Новая коллекция Той Бастар уже в каталоге',
-  'Бесплатная доставка от 50 000 ₸',
-]
+import { useT } from '@/locales'
 
 export function AnnouncementBar() {
   const [index, setIndex] = useState(0)
   const [visible, setVisible] = useState(true)
+  const t = useT()
+  const messages = t.announcement
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,7 +18,7 @@ export function AnnouncementBar() {
       }, 400)
     }, 4000)
     return () => clearInterval(interval)
-  }, [])
+  }, [messages.length])
 
   return (
     <div className="h-9 bg-foreground text-background flex items-center justify-center overflow-hidden">

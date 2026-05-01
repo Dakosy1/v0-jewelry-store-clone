@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { unlink } from 'fs/promises'
 import path from 'path'
+import { normalizeProductColors } from '@/lib/product-colors'
+
+function isValidBarcode(value: unknown): value is string {
+  return typeof value === 'string' && /^\d{4}$/.test(value)
+}
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -10,16 +15,22 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
     include: { category: true, collection: true },
   })
   if (!product) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  return NextResponse.json({ ...product, images: JSON.parse(product.images) })
+  return NextResponse.json({ ...product, colors: normalizeProductColors(product.tags ? JSON.parse(product.tags) : [], product.metal), images: JSON.parse(product.images) })
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const body = await request.json()
+  const colors = normalizeProductColors(body.colors, body.metal)
+
+  if (!isValidBarcode(body.barcode) || colors.length === 0) {
+    return NextResponse.json({ error: 'Проверьте штрихкод и выберите хотя бы один цвет' }, { status: 400 })
+  }
 
   const product = await prisma.product.update({
     where: { id },
     data: {
+      barcode: body.barcode,
       nameRu: body.nameRu,
       price: Number(body.price),
       oldPrice: body.oldPrice ? Number(body.oldPrice) : null,
@@ -29,6 +40,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       weight: body.weight ? Number(body.weight) : null,
       images: JSON.stringify(body.images ?? []),
       description: body.description ?? '',
+      tags: JSON.stringify(colors),
       inStock: body.inStock ?? true,
       isNew: body.isNew ?? false,
       isBestseller: body.isBestseller ?? false,
@@ -38,7 +50,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     include: { category: true, collection: true },
   })
 
-  return NextResponse.json({ ...product, images: JSON.parse(product.images) })
+  return NextResponse.json({ ...product, colors: normalizeProductColors(product.tags ? JSON.parse(product.tags) : [], product.metal), images: JSON.parse(product.images) })
 }
 
 // Архивировать товар

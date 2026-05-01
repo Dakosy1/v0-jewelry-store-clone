@@ -1,6 +1,5 @@
 import { CartItem } from '@/types/product';
-
-const WHATSAPP_NUMBER = '77474441219'; // Формат без + для wa.me
+import { WHATSAPP_NUMBER } from './social-links';
 
 export function buildWhatsAppLink(cart: CartItem[]): string {
   if (cart.length === 0) return '';
@@ -14,7 +13,8 @@ export function buildWhatsAppLink(cart: CartItem[]): string {
   const itemsText = cart
     .map((item, index) => {
       const linePrice = formatter.format(item.product.price * item.quantity);
-      return `${index + 1}. *${item.product.nameRu}* (${item.product.metal}, ${item.product.purity} пр.) — ${item.quantity} шт. — ${linePrice}`;
+      const barcode = item.product.barcode || '—';
+      return `${index + 1}. *${item.product.nameRu}* (${item.product.metal ? item.product.metal + ', ' : ''}${item.product.purity} пр., штрихкод: ${barcode}) — ${item.quantity} шт. — ${linePrice}`;
     })
     .join('\n');
 

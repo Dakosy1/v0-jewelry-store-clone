@@ -21,7 +21,7 @@ export function AdminNavbar() {
   return (
     <header className="bg-zinc-900 border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
       <div className="flex items-center gap-8">
-        <span className="text-white text-sm font-medium tracking-widest">TOMIRIS ADMIN</span>
+        <span className="text-white text-sm font-medium tracking-widest">TOMIRIS COLLECTION ASTANA ADMIN</span>
         <nav className="flex gap-6">
           {links.map(link => (
             <Link

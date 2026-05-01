@@ -26,7 +26,7 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: 'TOMIRIS COLLECTION — Ювелирные украшения',
+  title: 'Национальная украшения #1',
   description: 'Ювелирные украшения ручной работы: кольца, серьги, браслеты, колье и цепочки из золота 585/750 пробы. Доставка по Казахстану.',
 }
 

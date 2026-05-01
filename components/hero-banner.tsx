@@ -8,13 +8,14 @@ export function HeroBanner() {
   const t = useT()
 
   return (
-    <section className="relative w-full h-[95vh] min-h-[600px] overflow-hidden">
+    <section className="relative w-full h-[95vh] min-h-[600px] overflow-hidden bg-[#efe7dd]">
       <Image
-        src="/images/photosession/GK2A9401.JPG"
+        src="/images/photosession/webp/GK2A9401.webp"
         alt={t.hero.imageAlt}
         fill
         className="object-cover object-center"
         priority
+        quality={78}
         sizes="100vw"
       />
 

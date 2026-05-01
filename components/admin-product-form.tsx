@@ -8,6 +8,7 @@ type Category = { id: string; nameRu: string }
 type Collection = { id: string; nameRu: string }
 
 type FormData = {
+  barcode: string
   nameRu: string
   price: string
   oldPrice: string
@@ -44,8 +45,9 @@ const STONES = [
 ]
 
 const EMPTY: FormData = {
+  barcode: '',
   nameRu: '', price: '', oldPrice: '', categoryId: '', collectionId: '',
-  metal: 'gold', purity: '585', stone: '', weight: '', description: '',
+  metal: '', purity: '585', stone: '', weight: '', description: '',
   images: [], inStock: true, isNew: false, isBestseller: false,
 }
 
@@ -62,12 +64,13 @@ export function ProductForm({
   const [form, setForm] = useState<FormData>(() =>
     initialData
       ? {
+          barcode: initialData.barcode ?? '',
           nameRu: initialData.nameRu ?? '',
           price: String(initialData.price ?? ''),
           oldPrice: initialData.oldPrice ? String(initialData.oldPrice) : '',
           categoryId: initialData.categoryId ?? '',
           collectionId: initialData.collectionId ?? '',
-          metal: initialData.metal ?? 'gold',
+          metal: initialData.metal ?? '',
           purity: initialData.purity ?? '585',
           stone: initialData.stone ?? '',
           weight: initialData.weight ? String(initialData.weight) : '',
@@ -117,6 +120,8 @@ export function ProductForm({
 
     const payload = {
       ...form,
+      barcode: form.barcode,
+      colors: [],
       price: Number(form.price),
       oldPrice: form.oldPrice ? Number(form.oldPrice) : null,
       weight: form.weight ? Number(form.weight) : null,
@@ -147,6 +152,22 @@ export function ProductForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+
+      {/* Название */}
+      <div>
+        <label className={label}>Штрихкод (4 цифры) *</label>
+        <input
+          className={field}
+          required
+          inputMode="numeric"
+          pattern="\d{4}"
+          maxLength={4}
+          value={form.barcode}
+          onChange={e => set('barcode', e.target.value.replace(/\D/g, '').slice(0, 4))}
+          placeholder="0047"
+        />
+        <p className="text-zinc-600 text-xs mt-1">Ровно 4 цифры, можно с ведущими нулями</p>
+      </div>
 
       {/* Название */}
       <div>
@@ -201,8 +222,9 @@ export function ProductForm({
       {/* Металл и проба */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className={label}>Металл *</label>
+          <label className={label}>Металл</label>
           <select className={field} value={form.metal} onChange={e => set('metal', e.target.value)}>
+            <option value="">Не указан</option>
             {METALS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
           </select>
         </div>

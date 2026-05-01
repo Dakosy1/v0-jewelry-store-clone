@@ -1,14 +1,49 @@
 'use client'
 
+import Link from 'next/link'
 import { useT } from '@/locales'
+import { INSTAGRAM_URL, TELEGRAM_URL, WHATSAPP_URL } from '@/lib/social-links'
 
 export function Footer() {
   const t = useT()
 
   const columns = [
-    t.footer.shop,
-    t.footer.company,
-    t.footer.support,
+    {
+      title: t.footer.shop.title,
+      items: [
+        { label: t.footer.shop.items[0], href: '/catalog' },
+        { label: t.footer.shop.items[1], href: '/catalog' },
+        { label: t.footer.shop.items[2], href: '/catalog' },
+        { label: t.footer.shop.items[3], href: '/catalog' },
+        { label: t.footer.shop.items[4], href: '/#new-arrivals' },
+      ],
+    },
+    {
+      title: t.footer.company.title,
+      items: [
+        { label: t.footer.company.items[0], href: '/#about' },
+        { label: t.footer.company.items[1], href: '/#about' },
+        { label: t.footer.company.items[2], href: '/career-with-tomyris' },
+        { label: t.footer.company.items[3], href: '/ambassador' },
+        { label: t.footer.company.items[4], href: '/#contact' },
+      ],
+    },
+    {
+      title: t.footer.support.title,
+      items: [
+        { label: t.footer.support.items[0], href: '/#contact' },
+        { label: t.footer.support.items[1], href: '/catalog' },
+        { label: t.footer.support.items[2], href: '/#about' },
+        { label: t.footer.support.items[3], href: '/#contact' },
+        { label: t.footer.support.items[4], href: '/#contact' },
+      ],
+    },
+  ]
+
+  const socials = [
+    { label: 'Instagram', href: INSTAGRAM_URL },
+    { label: 'WhatsApp', href: WHATSAPP_URL },
+    { label: 'Telegram', href: TELEGRAM_URL },
   ]
 
   return (
@@ -18,7 +53,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-6">
             <h3 className="text-xl tracking-[0.4em] font-light font-sans uppercase">
-              TOMIRIS COLLECTION
+              TOMIRIS COLLECTION ASTANA
             </h3>
             <p className="text-xs text-white/60 leading-relaxed font-sans tracking-wide max-w-[240px]">
               {t.footer.description}
@@ -32,13 +67,13 @@ export function Footer() {
               </h4>
               <ul className="flex flex-col gap-4">
                 {column.items.map((item) => (
-                  <li key={item}>
-                    <a
-                      href="#"
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
                       className="text-xs text-white/80 hover:text-white transition-colors font-sans tracking-wide"
                     >
-                      {item}
-                    </a>
+                      {item.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -53,13 +88,15 @@ export function Footer() {
           {t.footer.copyright}
         </p>
         <div className="flex items-center gap-8">
-          {["Instagram", "Pinterest", "Facebook"].map((social) => (
+          {socials.map((social) => (
             <a
-              key={social}
-              href="#"
+              key={social.label}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-[10px] tracking-widest text-white/40 hover:text-white transition-colors font-sans uppercase"
             >
-              {social}
+              {social.label}
             </a>
           ))}
         </div>

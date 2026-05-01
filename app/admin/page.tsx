@@ -7,6 +7,7 @@ import Image from 'next/image'
 
 type Product = {
   id: string
+  barcode: string
   nameRu: string
   price: number
   images: string[]
@@ -66,6 +67,7 @@ export default function AdminDashboard() {
                 <tr className="border-b border-zinc-800 text-zinc-400 text-left">
                   <th className="pb-3 pr-4 font-normal">Фото</th>
                   <th className="pb-3 pr-4 font-normal">Название</th>
+                  <th className="pb-3 pr-4 font-normal">Штрихкод</th>
                   <th className="pb-3 pr-4 font-normal">Категория</th>
                   <th className="pb-3 pr-4 font-normal">Коллекция</th>
                   <th className="pb-3 pr-4 font-normal">Цена</th>
@@ -92,6 +94,7 @@ export default function AdminDashboard() {
                         {p.isBestseller && <span className="text-[10px] bg-amber-900/50 text-amber-300 px-1.5 py-0.5 rounded">ХИТ</span>}
                       </div>
                     </td>
+                    <td className="py-3 pr-4 text-zinc-300 font-mono">{p.barcode}</td>
                     <td className="py-3 pr-4 text-zinc-300">{p.category.nameRu}</td>
                     <td className="py-3 pr-4 text-zinc-300">{p.collection?.nameRu ?? '—'}</td>
                     <td className="py-3 pr-4 text-zinc-300">{p.price.toLocaleString('ru')} ₸</td>

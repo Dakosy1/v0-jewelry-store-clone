@@ -21,6 +21,17 @@ export default function CollectionPage() {
   const t = useT()
   const { locale } = useLanguage()
 
+  const medicalSteelHeadings = {
+    ru: '70 % медицинской стали и 30% напыление серебра',
+    en: '70% medical steel and 30% silver plating',
+    kk: '70% медициналық болат және 30% күміс жалату',
+  }
+
+  const collectionHeading =
+    collectionSlug === 'medical-steel'
+      ? medicalSteelHeadings[locale]
+      : collectionName || collectionSlug
+
   useEffect(() => {
     // Fetch collection info
     fetch('/api/collections')
@@ -34,14 +45,16 @@ export default function CollectionPage() {
           else setCollectionName(col.nameRu)
         }
       })
+      .catch(() => setCollectionName(''))
 
     // Fetch products for this collection
     fetch(`/api/products?collection=${collectionSlug}`)
       .then(res => res.json())
       .then(data => {
         setProducts(Array.isArray(data) ? data : [])
-        setLoading(false)
       })
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false))
   }, [collectionSlug, locale])
 
   const filtered = useMemo(
@@ -69,12 +82,12 @@ export default function CollectionPage() {
       <Navbar />
       <div className="pt-20">
         {/* Header */}
-        <section className="border-b border-border py-16 px-6 lg:px-10 text-center bg-background">
+        <section className="border-b border-border py-12 px-6 lg:px-10 text-center bg-background">
           <p className="text-[10px] tracking-[0.5em] text-muted-foreground mb-4 font-sans uppercase">
             {t.catalog.label}
           </p>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-foreground tracking-tight font-serif">
-            {collectionName || collectionSlug}
+          <h1 className="mx-auto max-w-5xl text-3xl md:text-4xl lg:text-5xl font-light text-foreground tracking-tight leading-tight font-serif">
+            {collectionHeading}
           </h1>
         </section>
 
