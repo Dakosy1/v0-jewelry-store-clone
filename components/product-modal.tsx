@@ -42,7 +42,8 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
       }).format(product.oldPrice)
     : null
 
-  const metalLabel = t.metals[product.metal as keyof typeof t.metals] ?? product.metal
+  const metalLabel = product.metal ? (t.metals[product.metal as keyof typeof t.metals] ?? product.metal) : null
+  const purityLabel = product.purity ? (t.purities[product.purity as keyof typeof t.purities] ?? product.purity) : null
   const stoneLabel =
     product.stone && product.stone !== 'none'
       ? (t.stones[product.stone as keyof typeof t.stones] ?? product.stone)
@@ -94,11 +95,13 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
         </div>
 
         {/* Details */}
-        <div className="flex flex-col px-8 py-10 gap-5">
+        <div className="flex flex-col px-4 py-6 md:px-8 md:py-10 gap-5">
           {/* Meta */}
-          <p className="text-[10px] tracking-[0.25em] text-muted-foreground uppercase font-sans">
-            {metalLabel} · {product.purity}
-          </p>
+          {(metalLabel || purityLabel) && (
+            <p className="text-[10px] tracking-[0.25em] text-muted-foreground uppercase font-sans">
+              {[metalLabel, purityLabel].filter(Boolean).join(' · ')}
+            </p>
+          )}
 
           {/* Name */}
           <h2 className="text-2xl font-light text-foreground tracking-tight font-serif leading-snug">
@@ -123,18 +126,22 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
               </span>
               <span className="text-xs text-foreground font-sans">{product.barcode}</span>
             </div>
-            <div className="flex justify-between px-4 py-3">
-              <span className="text-[10px] tracking-[0.1em] text-muted-foreground uppercase font-sans">
-                {t.product.specs.metal}
-              </span>
-              <span className="text-xs text-foreground font-sans">{metalLabel}</span>
-            </div>
-            <div className="flex justify-between px-4 py-3">
-              <span className="text-[10px] tracking-[0.1em] text-muted-foreground uppercase font-sans">
-                {t.product.specs.purity}
-              </span>
-              <span className="text-xs text-foreground font-sans">{product.purity}</span>
-            </div>
+            {metalLabel && (
+              <div className="flex justify-between px-4 py-3">
+                <span className="text-[10px] tracking-[0.1em] text-muted-foreground uppercase font-sans">
+                  {t.product.specs.metal}
+                </span>
+                <span className="text-xs text-foreground font-sans">{metalLabel}</span>
+              </div>
+            )}
+            {purityLabel && (
+              <div className="flex justify-between px-4 py-3">
+                <span className="text-[10px] tracking-[0.1em] text-muted-foreground uppercase font-sans">
+                  {t.product.specs.purity}
+                </span>
+                <span className="text-xs text-foreground font-sans">{purityLabel}</span>
+              </div>
+            )}
             {stoneLabel && (
               <div className="flex justify-between px-4 py-3">
                 <span className="text-[10px] tracking-[0.1em] text-muted-foreground uppercase font-sans">

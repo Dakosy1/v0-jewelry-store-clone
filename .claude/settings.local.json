@@ -1,7 +1,30 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -E \"\\\\.tsx$\")"
+      "Bash(grep -E \"\\\\.tsx$\")",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(kill 184894 184895)",
+      "Bash(nohup next *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001)",
+      "Bash(pkill -f \"next start\")",
+      "Bash(nohup npx *)",
+      "Bash(pkill -f \"next\")",
+      "Bash(git push *)",
+      "Read(//etc/nginx/sites-enabled/**)",
+      "Read(//etc/nginx/conf.d/**)",
+      "Bash(curl -sI https://tomiriscollectionastana.kz)",
+      "Bash(xargs ls *)",
+      "Bash(npx prisma *)",
+      "Bash(sed -i 's/client_max_body_size 25m/client_max_body_size 50m/g' /etc/nginx/sites-enabled/*)",
+      "Bash(nginx -t)",
+      "Bash(nginx -s reload)",
+      "Bash(curl -sI http://localhost:3001/uploads/1777612548743-xmqv59vv2yc.jpg)",
+      "Bash(curl -sI https://tomiriscollectionastana.kz/uploads/1777612548743-xmqv59vv2yc.jpg)",
+      "Bash(curl -sI http://localhost:3001/images/product-1.jpg)"
+    ],
+    "additionalDirectories": [
+      "/tmp"
     ]
   }
 }

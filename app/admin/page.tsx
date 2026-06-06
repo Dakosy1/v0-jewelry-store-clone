@@ -14,7 +14,7 @@ type Product = {
   inStock: boolean
   isNew: boolean
   isBestseller: boolean
-  category: { nameRu: string }
+  category: { nameRu: string } | null
   collection: { nameRu: string } | null
 }
 
@@ -42,7 +42,13 @@ export default function AdminDashboard() {
     load()
   }
 
-  return (
+  async function deleteProduct(id: string, name: string) {
+    if (!confirm(`Удалить «${name}» навсегда?\n\nФотографии тоже будут удалены. Отменить нельзя.`)) return
+    await fetch(`/api/admin/products/${id}`, { method: 'DELETE' })
+    load()
+  }
+
+return (
     <>
       <AdminNavbar />
       <main className="px-6 py-8 max-w-7xl mx-auto">
@@ -95,7 +101,7 @@ export default function AdminDashboard() {
                       </div>
                     </td>
                     <td className="py-3 pr-4 text-zinc-300 font-mono">{p.barcode}</td>
-                    <td className="py-3 pr-4 text-zinc-300">{p.category.nameRu}</td>
+                    <td className="py-3 pr-4 text-zinc-300">{p.category?.nameRu ?? '—'}</td>
                     <td className="py-3 pr-4 text-zinc-300">{p.collection?.nameRu ?? '—'}</td>
                     <td className="py-3 pr-4 text-zinc-300">{p.price.toLocaleString('ru')} ₸</td>
                     <td className="py-3 pr-4">
@@ -116,6 +122,12 @@ export default function AdminDashboard() {
                           className="text-zinc-400 hover:text-amber-400 transition text-xs"
                         >
                           В архив
+                        </button>
+                        <button
+                          onClick={() => deleteProduct(p.id, p.nameRu)}
+                          className="text-zinc-400 hover:text-red-400 transition text-xs"
+                        >
+                          Удалить
                         </button>
                       </div>
                     </td>

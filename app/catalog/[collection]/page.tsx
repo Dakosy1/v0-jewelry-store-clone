@@ -91,13 +91,13 @@ export default function CollectionPage() {
           </h1>
         </section>
 
-        {/* Category filter — only shown when collection has multiple categories */}
-        {activeCategories.length > 1 && (
-          <section className="border-b border-border bg-background px-6 lg:px-10 py-6 overflow-x-auto sticky top-20 z-40">
-            <div className="flex justify-center gap-10 min-w-max">
+        {/* Category filter */}
+        {products.length > 0 && (
+          <section className="border-b border-border bg-background sticky top-20 z-40">
+            <div className="flex overflow-x-auto pb-0 px-4 md:px-10 gap-4 md:gap-10">
               <button
                 onClick={() => setActiveCategory('all')}
-                className={`text-[10px] tracking-[0.25em] transition-all font-sans uppercase pb-2 border-b ${
+                className={`text-[10px] tracking-[0.25em] transition-all font-sans uppercase py-6 border-b-2 whitespace-nowrap ${
                   activeCategory === 'all'
                     ? 'text-foreground border-black'
                     : 'text-muted-foreground border-transparent hover:text-foreground'
@@ -109,7 +109,7 @@ export default function CollectionPage() {
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`text-[10px] tracking-[0.25em] transition-all font-sans uppercase pb-2 border-b ${
+                  className={`text-[10px] tracking-[0.25em] transition-all font-sans uppercase py-6 border-b-2 whitespace-nowrap ${
                     activeCategory === cat.id
                       ? 'text-foreground border-black'
                       : 'text-muted-foreground border-transparent hover:text-foreground'

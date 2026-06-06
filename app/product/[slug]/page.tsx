@@ -21,6 +21,7 @@ export default function ProductPage({ params }: Props) {
   const [loading, setLoading] = useState(true)
   const [slug, setSlug] = useState<string>('')
   const [selectedColor, setSelectedColor] = useState<ProductColor | null>(null)
+  const [activeImage, setActiveImage] = useState(0)
   const { addToCart } = useCart()
   const t = useT()
 
@@ -69,7 +70,8 @@ export default function ProductPage({ params }: Props) {
         }).format(product.oldPrice)
         : null
 
-    const metalLabel = t.metals[product.metal as keyof typeof t.metals] ?? product.metal
+    const metalLabel = product.metal ? (t.metals[product.metal as keyof typeof t.metals] ?? product.metal) : null
+    const purityLabel = product.purity ? (t.purities[product.purity as keyof typeof t.purities] ?? product.purity) : null
     const stoneLabel = product.stone ? (t.stones[product.stone as keyof typeof t.stones] ?? product.stone) : null
     const getLocalizedColorLabel = (color: ProductColor) =>
         t.productColors[color as keyof typeof t.productColors] ?? getProductColorLabel(color)
@@ -77,8 +79,8 @@ export default function ProductPage({ params }: Props) {
     const specs = [
         { label: t.product.barcode, value: product.barcode },
         ...(selectedColor ? [{ label: t.product.selectedColor, value: getLocalizedColorLabel(selectedColor) }] : []),
-        { label: t.product.specs.metal, value: metalLabel },
-        { label: t.product.specs.purity, value: `${product.purity}` },
+        ...(metalLabel ? [{ label: t.product.specs.metal, value: metalLabel }] : []),
+        ...(purityLabel ? [{ label: t.product.specs.purity, value: purityLabel }] : []),
         ...(product.stone && product.stone !== 'none'
             ? [{ label: t.product.specs.stone, value: stoneLabel ?? product.stone }]
             : []),
@@ -101,36 +103,57 @@ export default function ProductPage({ params }: Props) {
                 </div>
 
                 <div className="grid lg:grid-cols-2 gap-0 lg:min-h-[80vh] bg-background">
-                    {/* Image */}
-                    <div className="relative aspect-square lg:aspect-auto min-h-[500px] bg-muted">
-                        <Image
-                            src={product.images[0]}
-                            alt={product.nameRu}
-                            fill
-                            className="object-cover"
-                            priority
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                        />
-                        <div className="absolute top-0 left-0 flex flex-col gap-px">
-                            {product.isNew && (
-                                <span className="bg-black text-white text-[9px] tracking-[0.2em] px-3 py-1.5 uppercase">
-                                    New
-                                </span>
-                            )}
-                            {product.oldPrice && (
-                                <span className="bg-destructive text-white text-[9px] tracking-[0.2em] px-3 py-1.5 uppercase">
-                                    Sale
-                                </span>
-                            )}
+                    {/* Images */}
+                    <div className="flex flex-col lg:flex-row gap-0">
+                        {/* Thumbnails — слева на десктопе, снизу на мобиле */}
+                        {product.images.length > 1 && (
+                            <div className="flex lg:flex-col gap-2 p-3 lg:p-4 overflow-x-auto lg:overflow-y-auto lg:max-h-[80vh] order-2 lg:order-1">
+                                {product.images.map((img, i) => (
+                                    <button
+                                        key={i}
+                                        type="button"
+                                        onClick={() => setActiveImage(i)}
+                                        className={`flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 relative overflow-hidden border-2 transition-all ${activeImage === i ? 'border-foreground' : 'border-transparent opacity-50 hover:opacity-80'}`}
+                                    >
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img src={img} alt="" className="w-full h-full object-cover" />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                        {/* Main image */}
+                        <div className="relative flex-1 min-h-[500px] bg-muted order-1 lg:order-2 flex items-center justify-center">
+                            <Image
+                                src={product.images[activeImage] ?? product.images[0]}
+                                alt={product.nameRu}
+                                fill
+                                className="object-contain"
+                                priority
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                            />
+                            <div className="absolute top-0 left-0 flex flex-col gap-px">
+                                {product.isNew && (
+                                    <span className="bg-black text-white text-[9px] tracking-[0.2em] px-3 py-1.5 uppercase">
+                                        New
+                                    </span>
+                                )}
+                                {product.oldPrice && (
+                                    <span className="bg-destructive text-white text-[9px] tracking-[0.2em] px-3 py-1.5 uppercase">
+                                        Sale
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     </div>
 
                     {/* Details */}
-                    <div className="flex flex-col justify-center px-8 lg:px-20 xl:px-24 py-16 lg:py-0">
+                    <div className="flex flex-col justify-center px-4 md:px-8 lg:px-20 xl:px-24 py-16 lg:py-0">
                         {/* Category */}
-                        <p className="text-[10px] tracking-[0.3em] text-muted-foreground mb-4 font-sans uppercase">
-                            {metalLabel} · {product.purity} {t.product.purity}
-                        </p>
+                        {(metalLabel || purityLabel) && (
+                          <p className="text-[10px] tracking-[0.3em] text-muted-foreground mb-4 font-sans uppercase">
+                            {[metalLabel, purityLabel].filter(Boolean).join(' · ')}
+                          </p>
+                        )}
 
                         {/* Name */}
                         <h1 className="text-4xl md:text-5xl font-light text-foreground leading-[1.2] mb-8 tracking-tight font-serif">

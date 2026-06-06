@@ -36,7 +36,7 @@ model Product {
   oldPrice     Int?
   metal        String
   colors       String
-  purity       String
+  purity       String?
   stone        String?
   weight       Float?
   images       String      // JSON array as string
@@ -46,8 +46,8 @@ model Product {
   isNew        Boolean     @default(false)
   isBestseller Boolean     @default(false)
   status       String      @default("active") // "active" | "archived"
-  categoryId   String
-  category     Category    @relation(fields: [categoryId], references: [id])
+  categoryId   String?
+  category     Category?   @relation(fields: [categoryId], references: [id])
   collectionId String?
   collection   Collection? @relation(fields: [collectionId], references: [id])
   createdAt    DateTime    @default(now())

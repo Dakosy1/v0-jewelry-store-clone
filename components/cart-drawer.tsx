@@ -59,7 +59,7 @@ export function CartDrawer() {
                                 }).format(product.price * quantity)
 
                                 return (
-                                    <div key={product.id} className="flex gap-6">
+                                    <div key={product.id} className="flex gap-3 md:gap-6">
                                         {/* Image */}
                                         <div className="relative w-20 h-28 shrink-0 overflow-hidden bg-muted">
                                             <Image

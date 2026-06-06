@@ -1,7 +1,7 @@
 export type Metal = 'gold' | 'silver' | 'platinum' | 'rose-gold'
 export type Purity = '585' | '750' | '925' | '950' | '999'
-export type Stone = 'diamond' | 'ruby' | 'sapphire' | 'emerald' | 'pearl' | 'cubic-zirconia' | 'none'
-export type Category = 'rings' | 'necklaces' | 'bracelets' | 'earrings' | 'pendants' | 'chains' | 'sets'
+export type Stone = 'carnelian' | 'malachite' | 'jade' | 'cats-eye' | 'citrine' | 'amethyst' | 'larimar' | 'pearl' | 'quartz' | 'enamel' | 'none'
+export type Category = 'rings' | 'necklaces' | 'bracelets' | 'earrings' | 'pendants' | 'chains' | 'sets' | 'shekelik' | 'shakhmaran'
 export type ProductColor = 'gold' | 'silver' | 'rose-gold' | 'black' | 'white-pearl' | 'champagne'
 
 export interface Product {

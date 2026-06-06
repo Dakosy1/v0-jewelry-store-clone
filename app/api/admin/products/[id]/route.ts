@@ -27,6 +27,17 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json({ error: 'Проверьте штрихкод и выберите хотя бы один цвет' }, { status: 400 })
   }
 
+  // Удаляем фото которые убрали при редактировании
+  const existing = await prisma.product.findUnique({ where: { id } })
+  if (existing) {
+    const oldImages: string[] = JSON.parse(existing.images)
+    const newImages: string[] = body.images ?? []
+    const removed = oldImages.filter(img => img.startsWith('/uploads/') && !newImages.includes(img))
+    for (const imgPath of removed) {
+      await unlink(path.join(process.cwd(), 'public', imgPath)).catch(() => {})
+    }
+  }
+
   const product = await prisma.product.update({
     where: { id },
     data: {
@@ -35,7 +46,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       price: Number(body.price),
       oldPrice: body.oldPrice ? Number(body.oldPrice) : null,
       metal: body.metal,
-      purity: body.purity,
+      purity: body.purity || null,
       stone: body.stone || null,
       weight: body.weight ? Number(body.weight) : null,
       images: JSON.stringify(body.images ?? []),
@@ -44,7 +55,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       inStock: body.inStock ?? true,
       isNew: body.isNew ?? false,
       isBestseller: body.isBestseller ?? false,
-      categoryId: body.categoryId,
+      categoryId: body.categoryId || null,
       collectionId: body.collectionId || null,
     },
     include: { category: true, collection: true },

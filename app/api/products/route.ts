@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 function serializeProduct(p: any) {
   return {
     ...p,
+    category: p.categoryId ?? null,
     colors: [],
     images: JSON.parse(p.images),
     tags: p.tags ? JSON.parse(p.tags) : undefined,

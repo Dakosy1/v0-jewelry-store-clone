@@ -148,6 +148,13 @@ export function Navbar() {
               </button>
               {mobileCatalogOpen && (
                 <div className="flex flex-col gap-3 pl-4 border-l border-border">
+                  <Link
+                    href="/catalog"
+                    className="text-xs tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors font-sans"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {t.catalog.all}
+                  </Link>
                   {t.nav.collections.map(({ label, slug }) => (
                     <Link
                       key={slug}

@@ -56,8 +56,8 @@ function CatalogContent() {
 
             {/* Category filter — скрываем в режиме скидок */}
             {!isSale && (
-                <section className="border-b border-border bg-background px-6 lg:px-10 py-6 overflow-x-auto sticky top-20 z-40">
-                    <div className="flex justify-center gap-10 min-w-max">
+                <section className="border-b border-border bg-background py-6 overflow-x-auto sticky top-20 z-40">
+                    <div className="flex gap-4 md:gap-10 overflow-x-auto pb-2 px-4 md:px-10 scroll-snap-x">
                         <button
                             onClick={() => setActiveCategory('all')}
                             className={`text-[10px] tracking-[0.25em] transition-all font-sans uppercase pb-2 border-b ${activeCategory === 'all'

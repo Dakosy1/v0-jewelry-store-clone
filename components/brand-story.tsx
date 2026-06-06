@@ -46,7 +46,7 @@ export function BrandStory() {
           </div>
 
           {/* Values grid */}
-          <div className="grid grid-cols-2 gap-5 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
             {b.values.map((v: { title: string; text: string }) => (
               <div key={v.title}>
                 <p className="text-[11px] tracking-[0.15em] font-sans font-medium uppercase text-foreground mb-1">
