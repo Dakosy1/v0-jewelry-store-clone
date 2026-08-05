@@ -1,0 +1,81 @@
+name: Deploy to server
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+env:
+  APP_DIR: /var/www/tomiris-collection
+  APP_NAME: tomiris-collection
+  APP_PORT: 3000
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Set up SSH key
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_deploy
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_deploy
+
+      - name: Sync files to server
+        run: |
+          rsync -az --delete \
+            --exclude '.git' \
+            --exclude 'node_modules' \
+            --exclude '.next' \
+            -e "ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=yes" \
+            ./ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.APP_DIR }}/"
+
+      - name: Install, build and (re)start app
+        run: |
+          ssh -i ~/.ssh/id_deploy "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" '
+            set -e
+            cd '"${{ env.APP_DIR }}"'
+            command -v node >/dev/null || {
+              curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+              apt-get install -y nodejs
+            }
+            command -v pm2 >/dev/null || npm install -g pm2
+            npm ci
+            npm run build
+            pm2 describe '"${{ env.APP_NAME }}"' > /dev/null 2>&1 \
+              && pm2 restart '"${{ env.APP_NAME }}"' --update-env \
+              || pm2 start npm --name '"${{ env.APP_NAME }}"' -- start -- -p '"${{ env.APP_PORT }}"'
+            pm2 save
+          '
+
+      - name: Configure nginx reverse proxy
+        run: |
+          ssh -i ~/.ssh/id_deploy "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" '
+            set -e
+            cat > /etc/nginx/sites-available/'"${{ env.APP_NAME }}"' <<NGINX
+          server {
+              listen 80 default_server;
+              server_name _;
+
+              location / {
+                  proxy_pass http://127.0.0.1:'"${{ env.APP_PORT }}"';
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection "upgrade";
+                  proxy_set_header Host \$host;
+                  proxy_set_header X-Real-IP \$remote_addr;
+                  proxy_cache_bypass \$http_upgrade;
+              }
+          }
+          NGINX
+            ln -sf /etc/nginx/sites-available/'"${{ env.APP_NAME }}"' /etc/nginx/sites-enabled/'"${{ env.APP_NAME }}"'
+            rm -f /etc/nginx/sites-enabled/default
+            nginx -t
+            systemctl reload nginx
+          '
