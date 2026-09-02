@@ -20,6 +20,7 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
     const { addToCart } = useCart()
     const t = useT()
     const [modalOpen, setModalOpen] = useState(false)
+    const unavailable = product.status === 'archived' || product.inStock === false
 
     const formattedPrice = new Intl.NumberFormat('ru-KZ', {
         style: 'currency',
@@ -53,7 +54,10 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
                         src={product.images[0]}
                         alt={product.nameRu}
                         fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        className={cn(
+                            'object-cover transition-transform duration-700 group-hover:scale-105',
+                            unavailable && 'grayscale opacity-60'
+                        )}
                         sizes="300px"
                     />
 
@@ -76,7 +80,17 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
                         )}
                     </div>
 
+                    {/* Out of stock overlay */}
+                    {unavailable && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/25">
+                            <span className="bg-white/90 text-foreground text-[10px] tracking-[0.2em] px-3 py-1.5 uppercase font-sans">
+                                В наличии нет
+                            </span>
+                        </div>
+                    )}
+
                     {/* Quick Add */}
+                    {!unavailable && (
                     <button
                         onClick={(e) => {
                             e.stopPropagation()
@@ -87,6 +101,7 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
                     >
                         <Plus className="h-4 w-4" />
                     </button>
+                    )}
                 </div>
 
                 {/* Info */}

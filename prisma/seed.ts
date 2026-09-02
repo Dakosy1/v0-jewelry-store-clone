@@ -29,7 +29,7 @@ async function main() {
     { id: 'belbeu-kapsyrma', slug: 'belbeu-kapsyrma', nameRu: 'Пояс белбеу',   nameEn: 'Belbeu buckle', nameKk: 'Белбеу қапсырма' },
     { id: 'broshki',         slug: 'broshki',         nameRu: 'Брошки',        nameEn: 'Brooches',      nameKk: 'Брошкалар'       },
     { id: 'tumar',           slug: 'tumar',           nameRu: 'Тұмар',         nameEn: 'Tumar',         nameKk: 'Тұмар'           },
-    { id: 'kudalyk-set',     slug: 'kudalyk-set',     nameRu: 'Құдалық сет',   nameEn: 'Kudalyk set',   nameKk: 'Құдалық сет'     },
+    { id: 'kudalyk-set',     slug: 'kudalyk-set',     nameRu: 'Сет',           nameEn: 'Set',           nameKk: 'Сет'             },
     { id: 'mens-signet',   slug: 'mens-signet',   nameRu: 'Мужская печатка', nameEn: "Men's Signet Ring", nameKk: 'Ерлер мөр сақинасы' },
     { id: 'mens-bracelet', slug: 'mens-bracelet', nameRu: 'Мужской браслет', nameEn: "Men's Bracelet",   nameKk: 'Ерлер білезігі'    },
     { id: 'mens-chain',    slug: 'mens-chain',    nameRu: 'Мужская цепь',    nameEn: "Men's Chain",      nameKk: 'Ерлер тізбегі'     },

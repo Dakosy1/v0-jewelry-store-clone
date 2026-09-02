@@ -222,7 +222,7 @@ export default function ProductPage({ params }: Props) {
                         </p>
 
                         {/* Add to cart */}
-                        {product.inStock ? (
+                        {product.inStock && product.status !== 'archived' ? (
                             <button
                                 onClick={() => addToCart({ ...product, selectedColor: selectedColor ?? product.colors[0] })}
                                 className="flex items-center justify-center gap-3 bg-black text-white py-5 text-[10px] tracking-[0.3em] hover:bg-black/80 transition-all duration-300 font-sans uppercase shadow-xl shadow-black/5"

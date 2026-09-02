@@ -179,7 +179,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
 
           {/* Actions */}
           <div className="flex flex-col gap-3 mt-auto pt-2">
-            {product.inStock ? (
+            {product.inStock && product.status !== 'archived' ? (
               <button
                 onClick={() => {
                   addToCart(product)

@@ -24,7 +24,10 @@ export async function GET(request: Request) {
     const category = searchParams.get('category')
     const sale = searchParams.get('sale')
 
-    const where: any = { status: 'active' }
+    // Archived products stay visible on the site (shown as out-of-stock via
+    // the isSold/inStock badge) instead of disappearing — only exclude
+    // nothing here, "archived" is a display state, not a delete.
+    const where: any = {}
     if (collection) {
       const col = await prisma.collection.findUnique({ where: { slug: collection } })
       if (col) where.collectionId = col.id
