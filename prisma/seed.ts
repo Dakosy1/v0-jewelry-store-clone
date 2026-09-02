@@ -8,7 +8,7 @@ async function main() {
   // Collections
   const collections = [
     { slug: 'medical-steel', nameRu: 'Медицинская сталь с напылением серебра', nameEn: 'Medical Steel with Silver Plating', nameKk: 'Күміс жалатылған медициналық болат' },
-    { slug: 'silver',        nameRu: 'Серебро 925 пробы',                       nameEn: '925 Silver',                         nameKk: '925 сынамалы күміс' },
+    { slug: 'silver',        nameRu: 'Серебро 925 проба',                       nameEn: '925 Silver',                         nameKk: '925 сынамалы күміс' },
     { slug: 'toy-bastar',    nameRu: 'Идеи той бастар',                         nameEn: 'Toy Bastar Ideas',                    nameKk: 'Той бастар идеялары' },
     { slug: 'kyz-uzatu',     nameRu: 'Наборы для кыз узату',                    nameEn: 'Kyz Uzatu Sets',                      nameKk: 'Қыз ұзату жиынтықтары' },
   ]
