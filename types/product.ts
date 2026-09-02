@@ -1,7 +1,7 @@
 export type Metal = 'gold' | 'silver' | 'platinum' | 'rose-gold'
 export type Purity = '585' | '750' | '925' | '950' | '999'
 export type Stone = 'carnelian' | 'malachite' | 'jade' | 'cats-eye' | 'citrine' | 'amethyst' | 'larimar' | 'pearl' | 'quartz' | 'enamel' | 'none'
-export type Category = 'rings' | 'necklaces' | 'bracelets' | 'earrings' | 'pendants' | 'chains' | 'sets' | 'shekelik' | 'shakhmaran'
+export type Category = 'rings' | 'necklaces' | 'bracelets' | 'earrings' | 'pendants' | 'chains' | 'sets' | 'shekelik' | 'shakhmaran' | 'besbilezik' | 'belbeu-kapsyrma' | 'broshki' | 'tumar' | 'kudalyk-set'
 export type ProductColor = 'gold' | 'silver' | 'rose-gold' | 'black' | 'white-pearl' | 'champagne'
 
 export interface Product {
@@ -21,6 +21,10 @@ export interface Product {
   weight?: number        // в граммах
   images: string[]       // пути к изображениям
   description: string
+  nameKk?: string
+  nameEn?: string
+  descriptionKk?: string
+  descriptionEn?: string
   tags?: string[]
   inStock: boolean
   isNew?: boolean

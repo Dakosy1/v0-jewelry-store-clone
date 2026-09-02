@@ -19,4 +19,9 @@ export const categories: CategoryItem[] = [
     { id: 'sets',       slug: 'sets',       nameRu: 'КОМПЛЕКТЫ', nameEn: 'SETS',       nameKk: 'ЖИНАҚТАР'   },
     { id: 'shekelik',   slug: 'shekelik',   nameRu: 'ШЕКЕЛІК',   nameEn: 'SHEKELIK',   nameKk: 'ШЕКЕЛІК'    },
     { id: 'shakhmaran', slug: 'shakhmaran', nameRu: 'ШАХМАРАН',  nameEn: 'SHAKHMARAN', nameKk: 'ШАХМАРАН'   },
+    { id: 'besbilezik',      slug: 'besbilezik',      nameRu: 'БЕСБІЛЕЗІК',    nameEn: 'BESBILEZIK',     nameKk: 'БЕСБІЛЕЗІК'      },
+    { id: 'belbeu-kapsyrma', slug: 'belbeu-kapsyrma', nameRu: 'ПОЯС БЕЛБЕУ',   nameEn: 'BELBEU BUCKLE',  nameKk: 'БЕЛБЕУ ҚАПСЫРМА' },
+    { id: 'broshki',         slug: 'broshki',         nameRu: 'БРОШКИ',        nameEn: 'BROOCHES',       nameKk: 'БРОШКАЛАР'       },
+    { id: 'tumar',           slug: 'tumar',           nameRu: 'ТҰМАР',         nameEn: 'TUMAR',          nameKk: 'ТҰМАР'           },
+    { id: 'kudalyk-set',     slug: 'kudalyk-set',     nameRu: 'ҚҰДАЛЫҚ СЕТ',   nameEn: 'KUDALYK SET',    nameKk: 'ҚҰДАЛЫҚ СЕТ'     },
 ]

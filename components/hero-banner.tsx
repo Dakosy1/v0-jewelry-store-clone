@@ -55,22 +55,24 @@ export function HeroBanner() {
           href="/catalog"
           style={{
             display: 'inline-block',
-            border: '1px solid rgba(255,255,255,0.7)',
-            color: '#fff',
-            padding: '12px 32px',
-            fontSize: '9px',
+            border: '1px solid #fff',
+            background: '#fff',
+            color: '#000',
+            padding: '20px 48px',
+            fontSize: '14px',
+            fontWeight: 700,
             letterSpacing: '0.35em',
             textTransform: 'uppercase',
             fontFamily: 'var(--font-montserrat), sans-serif',
-            transition: 'background 0.3s ease, border-color 0.3s ease',
+            transition: 'background 0.3s ease, border-color 0.3s ease, color 0.3s ease',
           }}
           onMouseEnter={e => {
-            (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.15)'
-            ;(e.currentTarget as HTMLElement).style.borderColor = '#fff'
+            (e.currentTarget as HTMLElement).style.background = 'transparent'
+            ;(e.currentTarget as HTMLElement).style.color = '#fff'
           }}
           onMouseLeave={e => {
-            (e.currentTarget as HTMLElement).style.background = 'transparent'
-            ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.7)'
+            (e.currentTarget as HTMLElement).style.background = '#fff'
+            ;(e.currentTarget as HTMLElement).style.color = '#000'
           }}
         >
           {t.hero.cta}

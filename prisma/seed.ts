@@ -25,6 +25,11 @@ async function main() {
     { id: 'pendants',  slug: 'pendants',  nameRu: 'Подвески',  nameEn: 'Pendants',  nameKk: 'Медальондар' },
     { id: 'chains',    slug: 'chains',    nameRu: 'Цепочки',   nameEn: 'Chains',    nameKk: 'Тізбектер'   },
     { id: 'sets',      slug: 'sets',      nameRu: 'Комплекты', nameEn: 'Sets',      nameKk: 'Жиынтықтар'  },
+    { id: 'besbilezik',      slug: 'besbilezik',      nameRu: 'Бесбілезік',    nameEn: 'Besbilezik',    nameKk: 'Бесбілезік'      },
+    { id: 'belbeu-kapsyrma', slug: 'belbeu-kapsyrma', nameRu: 'Пояс белбеу',   nameEn: 'Belbeu buckle', nameKk: 'Белбеу қапсырма' },
+    { id: 'broshki',         slug: 'broshki',         nameRu: 'Брошки',        nameEn: 'Brooches',      nameKk: 'Брошкалар'       },
+    { id: 'tumar',           slug: 'tumar',           nameRu: 'Тұмар',         nameEn: 'Tumar',         nameKk: 'Тұмар'           },
+    { id: 'kudalyk-set',     slug: 'kudalyk-set',     nameRu: 'Құдалық сет',   nameEn: 'Kudalyk set',   nameKk: 'Құдалық сет'     },
   ]
   for (const cat of categories) {
     await prisma.category.upsert({ where: { id: cat.id }, update: cat, create: cat })

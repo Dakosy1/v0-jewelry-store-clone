@@ -27,11 +27,20 @@ model Category {
   products  Product[]
 }
 
+model Stone {
+  id        String   @id @default(cuid())
+  label     String
+  value     String   @unique
+  createdAt DateTime @default(now())
+}
+
 model Product {
   id           String      @id
   slug         String      @unique
   barcode      String
   nameRu       String
+  nameKk       String?
+  nameEn       String?
   price        Int
   oldPrice     Int?
   metal        String
@@ -41,6 +50,8 @@ model Product {
   weight       Float?
   images       String      // JSON array as string
   description  String
+  descriptionKk String?
+  descriptionEn String?
   tags         String?     // JSON array as string
   inStock      Boolean     @default(true)
   isNew        Boolean     @default(false)

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { X, ShoppingBag, ArrowRight } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import { useT } from '@/locales'
+import { useLanguage } from '@/context/LanguageContext'
 import type { Product } from '@/types/product'
 
 interface ProductModalProps {
@@ -15,6 +16,17 @@ interface ProductModalProps {
 export function ProductModal({ product, onClose }: ProductModalProps) {
   const { addToCart } = useCart()
   const t = useT()
+  const { locale } = useLanguage()
+
+  const displayName =
+    (locale === 'kk' && product.nameKk) ? product.nameKk :
+    (locale === 'en' && product.nameEn) ? product.nameEn :
+    product.nameRu
+
+  const displayDescription =
+    (locale === 'kk' && product.descriptionKk) ? product.descriptionKk :
+    (locale === 'en' && product.descriptionEn) ? product.descriptionEn :
+    product.description
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -75,7 +87,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
         <div className="relative aspect-square md:aspect-auto min-h-[300px] bg-secondary">
           <Image
             src={product.images[0]}
-            alt={product.nameRu}
+            alt={displayName}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -105,7 +117,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
 
           {/* Name */}
           <h2 className="text-2xl font-light text-foreground tracking-tight font-serif leading-snug">
-            {product.nameRu}
+            {displayName}
           </h2>
 
           {/* Price */}
@@ -162,7 +174,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
 
           {/* Description */}
           <p className="text-xs text-foreground/60 leading-relaxed font-sans line-clamp-3">
-            {product.description}
+            {displayDescription}
           </p>
 
           {/* Actions */}

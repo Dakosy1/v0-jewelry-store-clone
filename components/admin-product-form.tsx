@@ -9,6 +9,8 @@ type Collection = { id: string; nameRu: string }
 type FormData = {
   barcode: string
   nameRu: string
+  nameKk: string
+  nameEn: string
   price: string
   oldPrice: string
   categoryId: string
@@ -18,6 +20,8 @@ type FormData = {
   stone: string
   weight: string
   description: string
+  descriptionKk: string
+  descriptionEn: string
   images: string[]
   inStock: boolean
   isNew: boolean
@@ -49,8 +53,10 @@ const STONES = [
 
 const EMPTY: FormData = {
   barcode: '',
-  nameRu: '', price: '', oldPrice: '', categoryId: '', collectionId: '',
-  metal: '', purity: '', stone: '', weight: '', description: '',
+  nameRu: '', nameKk: '', nameEn: '',
+  price: '', oldPrice: '', categoryId: '', collectionId: '',
+  metal: '', purity: '', stone: '', weight: '',
+  description: '', descriptionKk: '', descriptionEn: '',
   images: [], inStock: true, isNew: false, isBestseller: false,
 }
 
@@ -69,6 +75,8 @@ export function ProductForm({
       ? {
           barcode: initialData.barcode ?? '',
           nameRu: initialData.nameRu ?? '',
+          nameKk: initialData.nameKk ?? '',
+          nameEn: initialData.nameEn ?? '',
           price: String(initialData.price ?? ''),
           oldPrice: initialData.oldPrice ? String(initialData.oldPrice) : '',
           categoryId: initialData.categoryId ?? '',
@@ -78,6 +86,8 @@ export function ProductForm({
           stone: initialData.stone ?? '',
           weight: initialData.weight ? String(initialData.weight) : '',
           description: initialData.description ?? '',
+          descriptionKk: initialData.descriptionKk ?? '',
+          descriptionEn: initialData.descriptionEn ?? '',
           images: initialData.images ?? [],
           inStock: initialData.inStock ?? true,
           isNew: initialData.isNew ?? false,
@@ -91,11 +101,40 @@ export function ProductForm({
   const [uploading, setUploading] = useState(0)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const [dbStones, setDbStones] = useState<{ id: string; label: string; value: string }[]>([])
+  const [newStoneName, setNewStoneName] = useState('')
+  const [addingStone, setAddingStone] = useState(false)
+  const [showNameKk, setShowNameKk] = useState(!!(initialData?.nameKk))
+  const [showNameEn, setShowNameEn] = useState(!!(initialData?.nameEn))
+  const [showDescKk, setShowDescKk] = useState(!!(initialData?.descriptionKk))
+  const [showDescEn, setShowDescEn] = useState(!!(initialData?.descriptionEn))
+
+  const allStones = [...STONES, ...dbStones.map(s => ({ value: s.value, label: s.label }))]
+
+  function reloadStones() {
+    fetch('/api/admin/stones').then(r => r.json()).then(setDbStones)
+  }
 
   useEffect(() => {
     fetch('/api/categories').then(r => r.json()).then(setCategories)
     fetch('/api/collections').then(r => r.json()).then(setCollections)
+    reloadStones()
   }, [])
+
+  async function addStone() {
+    if (!newStoneName.trim()) return
+    setAddingStone(true)
+    const res = await fetch('/api/admin/stones', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ label: newStoneName }),
+    })
+    const stone = await res.json()
+    setDbStones(prev => [...prev, stone])
+    set('stone', stone.value)
+    setNewStoneName('')
+    setAddingStone(false)
+  }
 
   function set(field: keyof FormData, value: any) {
     setForm(f => ({ ...f, [field]: value }))
@@ -183,6 +222,30 @@ export function ProductForm({
         <input className={field} required value={form.nameRu}
           onChange={e => set('nameRu', e.target.value)}
           placeholder="Кольцо с бриллиантом солитер" />
+        {showNameKk && (
+          <input className={field + ' mt-2'} value={form.nameKk}
+            onChange={e => set('nameKk', e.target.value)}
+            placeholder="Қазақша атауы" />
+        )}
+        {showNameEn && (
+          <input className={field + ' mt-2'} value={form.nameEn}
+            onChange={e => set('nameEn', e.target.value)}
+            placeholder="Name in English" />
+        )}
+        <div className="flex gap-3 mt-2">
+          {!showNameKk && (
+            <button type="button" onClick={() => setShowNameKk(true)}
+              className="text-xs text-gray-400 hover:text-gray-600 transition">
+              + Добавить казахский
+            </button>
+          )}
+          {!showNameEn && (
+            <button type="button" onClick={() => setShowNameEn(true)}
+              className="text-xs text-gray-400 hover:text-gray-600 transition">
+              + Добавить английский
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Описание */}
@@ -191,6 +254,30 @@ export function ProductForm({
         <textarea className={field + ' min-h-[100px] resize-y'} value={form.description}
           onChange={e => set('description', e.target.value)}
           placeholder="Опишите товар..." />
+        {showDescKk && (
+          <textarea className={field + ' min-h-[100px] resize-y mt-2'} value={form.descriptionKk}
+            onChange={e => set('descriptionKk', e.target.value)}
+            placeholder="Қазақша сипаттама..." />
+        )}
+        {showDescEn && (
+          <textarea className={field + ' min-h-[100px] resize-y mt-2'} value={form.descriptionEn}
+            onChange={e => set('descriptionEn', e.target.value)}
+            placeholder="Description in English..." />
+        )}
+        <div className="flex gap-3 mt-2">
+          {!showDescKk && (
+            <button type="button" onClick={() => setShowDescKk(true)}
+              className="text-xs text-gray-400 hover:text-gray-600 transition">
+              + Добавить казахский
+            </button>
+          )}
+          {!showDescEn && (
+            <button type="button" onClick={() => setShowDescEn(true)}
+              className="text-xs text-gray-400 hover:text-gray-600 transition">
+              + Добавить английский
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Цены */}
@@ -263,8 +350,28 @@ export function ProductForm({
         <div>
           <label className={label}>Камень</label>
           <select className={field} value={form.stone} onChange={e => set('stone', e.target.value)}>
-            {STONES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+            {allStones.map(s => (
+              <option key={s.value} value={s.value}>{s.label}</option>
+            ))}
           </select>
+          {/* Добавить новый камень */}
+          <div className="flex gap-2 mt-2">
+            <input
+              className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm"
+              placeholder="Добавить свой камень..."
+              value={newStoneName}
+              onChange={e => setNewStoneName(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addStone())}
+            />
+            <button
+              type="button"
+              onClick={addStone}
+              disabled={addingStone || !newStoneName.trim()}
+              className="px-3 py-2 rounded-lg bg-gray-800 text-white text-sm hover:bg-gray-700 disabled:opacity-40 transition"
+            >
+              {addingStone ? '...' : '+ Добавить'}
+            </button>
+          </div>
         </div>
         <div>
           <label className={label}>Вес (г)</label>

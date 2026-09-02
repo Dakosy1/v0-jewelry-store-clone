@@ -43,6 +43,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     data: {
       barcode: body.barcode,
       nameRu: body.nameRu,
+      nameKk: body.nameKk || null,
+      nameEn: body.nameEn || null,
       price: Number(body.price),
       oldPrice: body.oldPrice ? Number(body.oldPrice) : null,
       metal: body.metal,
@@ -51,6 +53,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       weight: body.weight ? Number(body.weight) : null,
       images: JSON.stringify(body.images ?? []),
       description: body.description ?? '',
+      descriptionKk: body.descriptionKk || null,
+      descriptionEn: body.descriptionEn || null,
       tags: JSON.stringify(colors),
       inStock: body.inStock ?? true,
       isNew: body.isNew ?? false,
