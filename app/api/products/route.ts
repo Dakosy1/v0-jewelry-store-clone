@@ -14,6 +14,9 @@ function isValidBarcode(value: unknown): value is string {
   return typeof value === 'string' && /^\d{4}$/.test(value)
 }
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
@@ -35,7 +38,9 @@ export async function GET(request: Request) {
       orderBy: { createdAt: 'desc' },
     })
 
-    return NextResponse.json(products.map(serializeProduct))
+    return NextResponse.json(products.map(serializeProduct), {
+      headers: { 'Cache-Control': 'no-store, must-revalidate' },
+    })
   } catch (error) {
     console.error('[/api/products] Error:', error)
     return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 })
