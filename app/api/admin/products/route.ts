@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
       inStock: body.inStock ?? true,
       isNew: body.isNew ?? false,
       isBestseller: body.isBestseller ?? false,
+      isSold: body.isSold ?? false,
       status: 'active',
       categoryId: body.categoryId || null,
       collectionId: body.collectionId || null,

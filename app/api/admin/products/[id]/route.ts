@@ -59,6 +59,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       inStock: body.inStock ?? true,
       isNew: body.isNew ?? false,
       isBestseller: body.isBestseller ?? false,
+      isSold: body.isSold ?? false,
       categoryId: body.categoryId || null,
       collectionId: body.collectionId || null,
     },

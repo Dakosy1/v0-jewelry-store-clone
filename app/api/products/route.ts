@@ -73,6 +73,7 @@ export async function POST(request: Request) {
         inStock: body.inStock ?? true,
         isNew: body.isNew ?? false,
         isBestseller: body.isBestseller ?? false,
+        isSold: body.isSold ?? false,
         categoryId: body.categoryId,
         collectionId: body.collectionId ?? null,
       },

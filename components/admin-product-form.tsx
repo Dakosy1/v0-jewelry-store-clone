@@ -26,6 +26,7 @@ type FormData = {
   inStock: boolean
   isNew: boolean
   isBestseller: boolean
+  isSold: boolean
 }
 
 const METALS = [
@@ -57,7 +58,7 @@ const EMPTY: FormData = {
   price: '', oldPrice: '', categoryId: '', collectionId: '',
   metal: '', purity: '', stone: '', weight: '',
   description: '', descriptionKk: '', descriptionEn: '',
-  images: [], inStock: true, isNew: false, isBestseller: false,
+  images: [], inStock: true, isNew: false, isBestseller: false, isSold: false,
 }
 
 export function ProductForm({
@@ -92,6 +93,7 @@ export function ProductForm({
           inStock: initialData.inStock ?? true,
           isNew: initialData.isNew ?? false,
           isBestseller: initialData.isBestseller ?? false,
+          isSold: initialData.isSold ?? false,
         }
       : EMPTY
   )
@@ -420,6 +422,7 @@ export function ProductForm({
           ['inStock', 'В наличии'],
           ['isNew', 'Новинка'],
           ['isBestseller', 'Хит продаж'],
+          ['isSold', 'Продан'],
         ] as const).map(([key, label]) => (
           <label key={key} className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" checked={form[key] as boolean}

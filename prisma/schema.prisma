@@ -56,6 +56,7 @@ model Product {
   inStock      Boolean     @default(true)
   isNew        Boolean     @default(false)
   isBestseller Boolean     @default(false)
+  isSold       Boolean     @default(false)
   status       String      @default("active") // "active" | "archived"
   categoryId   String?
   category     Category?   @relation(fields: [categoryId], references: [id])

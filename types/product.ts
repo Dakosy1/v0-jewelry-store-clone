@@ -29,6 +29,7 @@ export interface Product {
   inStock: boolean
   isNew?: boolean
   isBestseller?: boolean
+  isSold?: boolean
 }
 
 export interface CartItem {

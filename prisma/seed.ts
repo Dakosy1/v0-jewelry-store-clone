@@ -33,6 +33,7 @@ async function main() {
     { id: 'mens-signet',   slug: 'mens-signet',   nameRu: 'Мужская печатка', nameEn: "Men's Signet Ring", nameKk: 'Ерлер мөр сақинасы' },
     { id: 'mens-bracelet', slug: 'mens-bracelet', nameRu: 'Мужской браслет', nameEn: "Men's Bracelet",   nameKk: 'Ерлер білезігі'    },
     { id: 'mens-chain',    slug: 'mens-chain',    nameRu: 'Мужская цепь',    nameEn: "Men's Chain",      nameKk: 'Ерлер тізбегі'     },
+    { id: 'gift-sets',     slug: 'gift-sets',     nameRu: 'Подарочные наборы', nameEn: 'Gift Sets',       nameKk: 'Сыйлық сеттер'     },
   ]
   for (const cat of categories) {
     await prisma.category.upsert({ where: { id: cat.id }, update: cat, create: cat })

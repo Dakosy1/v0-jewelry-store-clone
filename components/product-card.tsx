@@ -59,6 +59,11 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
 
                     {/* Badges */}
                     <div className="absolute top-0 left-0 flex flex-col gap-px">
+                        {product.isSold && (
+                            <span className="bg-zinc-600 text-white text-[9px] tracking-[0.2em] px-2 py-1 uppercase">
+                                Продан
+                            </span>
+                        )}
                         {product.isNew && (
                             <span className="bg-black text-white text-[9px] tracking-[0.2em] px-2 py-1 uppercase">
                                 New
