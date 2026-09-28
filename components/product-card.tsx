@@ -80,15 +80,6 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
                         )}
                     </div>
 
-                    {/* Out of stock overlay */}
-                    {unavailable && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/25">
-                            <span className="bg-white/90 text-foreground text-[10px] tracking-[0.2em] px-3 py-1.5 uppercase font-sans">
-                                В наличии нет
-                            </span>
-                        </div>
-                    )}
-
                     {/* Quick Add */}
                     {!unavailable && (
                     <button
@@ -106,6 +97,11 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
 
                 {/* Info */}
                 <div className="space-y-1">
+                    {unavailable && (
+                        <p className="text-[10px] tracking-[0.2em] text-foreground font-sans uppercase">
+                            В наличии нет
+                        </p>
+                    )}
                     <p className="text-[10px] tracking-[0.25em] text-muted-foreground font-sans uppercase">
                         {metalLabel} · {product.purity}
                     </p>

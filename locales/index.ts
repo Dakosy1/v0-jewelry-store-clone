@@ -22,6 +22,7 @@ const translations = {
       collections: [
         { label: 'Медицинская сталь с напылением серебра', slug: 'medical-steel' },
         { label: 'Серебро 925 пробы', slug: 'silver' },
+        { label: 'Золото', slug: 'gold' },
         { label: 'Идеи той бастар', slug: 'toy-bastar' },
         { label: 'Наборы для кыз узату', slug: 'kyz-uzatu' },
       ],
@@ -214,6 +215,7 @@ const translations = {
       collections: [
         { label: 'Medical Steel with Silver Plating', slug: 'medical-steel' },
         { label: '925 Silver', slug: 'silver' },
+        { label: 'Gold', slug: 'gold' },
         { label: 'Toy Bastar Ideas', slug: 'toy-bastar' },
         { label: 'Kyz Uzatu Sets', slug: 'kyz-uzatu' },
       ],
@@ -397,6 +399,7 @@ const translations = {
       collections: [
         { label: 'Күміс жалатылған медициналық болат', slug: 'medical-steel' },
         { label: '925 сынамалы күміс', slug: 'silver' },
+        { label: 'Алтын', slug: 'gold' },
         { label: 'Той бастар идеялары', slug: 'toy-bastar' },
         { label: 'Қыз ұзату жиынтықтары', slug: 'kyz-uzatu' },
       ],
