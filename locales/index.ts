@@ -25,6 +25,7 @@ const translations = {
         { label: 'Золото', slug: 'gold' },
         { label: 'Идеи той бастар', slug: 'toy-bastar' },
         { label: 'Наборы для кыз узату', slug: 'kyz-uzatu' },
+        { label: 'Мужское', slug: 'men' },
       ],
     },
     // Hero
@@ -218,6 +219,7 @@ const translations = {
         { label: 'Gold', slug: 'gold' },
         { label: 'Toy Bastar Ideas', slug: 'toy-bastar' },
         { label: 'Kyz Uzatu Sets', slug: 'kyz-uzatu' },
+        { label: "Men's", slug: 'men' },
       ],
     },
     hero: {
@@ -402,6 +404,7 @@ const translations = {
         { label: 'Алтын', slug: 'gold' },
         { label: 'Той бастар идеялары', slug: 'toy-bastar' },
         { label: 'Қыз ұзату жиынтықтары', slug: 'kyz-uzatu' },
+        { label: 'Ерлерге', slug: 'men' },
       ],
     },
     hero: {

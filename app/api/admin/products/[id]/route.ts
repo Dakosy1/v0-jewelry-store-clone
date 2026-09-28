@@ -60,6 +60,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       isNew: body.isNew ?? false,
       isBestseller: body.isBestseller ?? false,
       isSold: body.isSold ?? false,
+      isMen: body.isMen ?? false,
       categoryId: body.categoryId || null,
       collectionId: body.collectionId || null,
     },

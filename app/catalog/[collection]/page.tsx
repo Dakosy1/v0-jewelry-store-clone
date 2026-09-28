@@ -27,10 +27,20 @@ export default function CollectionPage() {
     kk: '70% медициналық болат және 30% күміс жалату',
   }
 
+  const menHeadings = {
+    ru: 'Мужское',
+    en: "Men's",
+    kk: 'Ерлерге',
+  }
+
+  const isMen = collectionSlug === 'men'
+
   const collectionHeading =
     collectionSlug === 'medical-steel'
       ? medicalSteelHeadings[locale]
-      : collectionName || collectionSlug
+      : isMen
+        ? menHeadings[locale]
+        : collectionName || collectionSlug
 
   useEffect(() => {
     // Fetch collection info
@@ -48,14 +58,14 @@ export default function CollectionPage() {
       .catch(() => setCollectionName(''))
 
     // Fetch products for this collection
-    fetch(`/api/products?collection=${collectionSlug}`)
+    fetch(isMen ? '/api/products?men=1' : `/api/products?collection=${collectionSlug}`)
       .then(res => res.json())
       .then(data => {
         setProducts(Array.isArray(data) ? data : [])
       })
       .catch(() => setProducts([]))
       .finally(() => setLoading(false))
-  }, [collectionSlug, locale])
+  }, [collectionSlug, locale, isMen])
 
   const filtered = useMemo(
     () =>

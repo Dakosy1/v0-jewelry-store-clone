@@ -26,8 +26,6 @@ export const categories: CategoryItem[] = [
     { id: 'broshki',         slug: 'broshki',         nameRu: 'БРОШКИ',        nameEn: 'BROOCHES',       nameKk: 'БРОШКАЛАР'       },
     { id: 'tumar',           slug: 'tumar',           nameRu: 'ТҰМАР',         nameEn: 'TUMAR',          nameKk: 'ТҰМАР'           },
     { id: 'kudalyk-set',     slug: 'kudalyk-set',     nameRu: 'СЕТ',           nameEn: 'SET',            nameKk: 'СЕТ'             },
-    { id: 'mens-signet',   slug: 'mens-signet',   nameRu: 'МУЖСКАЯ ПЕЧАТКА', nameEn: "MEN'S SIGNET RING", nameKk: 'ЕРЛЕР МӨР САҚИНАСЫ' },
-    { id: 'mens-bracelet', slug: 'mens-bracelet', nameRu: 'МУЖСКОЙ БРАСЛЕТ', nameEn: "MEN'S BRACELET",   nameKk: 'ЕРЛЕР БІЛЕЗІГІ'    },
-    { id: 'mens-chain',    slug: 'mens-chain',    nameRu: 'МУЖСКАЯ ЦЕПЬ',    nameEn: "MEN'S CHAIN",      nameKk: 'ЕРЛЕР ТІЗБЕГІ'     },
+    { id: 'signet',        slug: 'signet',        nameRu: 'ПЕЧАТКА',         nameEn: 'SIGNET RING',      nameKk: 'МӨР САҚИНА'        },
     { id: 'gift-sets',     slug: 'gift-sets',     nameRu: 'ПОДАРОЧНЫЕ НАБОРЫ', nameEn: 'GIFT SETS',       nameKk: 'СЫЙЛЫҚ СЕТТЕР'     },
 ]

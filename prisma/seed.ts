@@ -33,9 +33,7 @@ async function main() {
     { id: 'broshki',         slug: 'broshki',         nameRu: 'Брошки',        nameEn: 'Brooches',      nameKk: 'Брошкалар'       },
     { id: 'tumar',           slug: 'tumar',           nameRu: 'Тұмар',         nameEn: 'Tumar',         nameKk: 'Тұмар'           },
     { id: 'kudalyk-set',     slug: 'kudalyk-set',     nameRu: 'Сет',           nameEn: 'Set',           nameKk: 'Сет'             },
-    { id: 'mens-signet',   slug: 'mens-signet',   nameRu: 'Мужская печатка', nameEn: "Men's Signet Ring", nameKk: 'Ерлер мөр сақинасы' },
-    { id: 'mens-bracelet', slug: 'mens-bracelet', nameRu: 'Мужской браслет', nameEn: "Men's Bracelet",   nameKk: 'Ерлер білезігі'    },
-    { id: 'mens-chain',    slug: 'mens-chain',    nameRu: 'Мужская цепь',    nameEn: "Men's Chain",      nameKk: 'Ерлер тізбегі'     },
+    { id: 'signet',        slug: 'signet',        nameRu: 'Печатка',         nameEn: 'Signet Ring',       nameKk: 'Мөр сақина'         },
     { id: 'gift-sets',     slug: 'gift-sets',     nameRu: 'Подарочные наборы', nameEn: 'Gift Sets',       nameKk: 'Сыйлық сеттер'     },
   ]
   for (const cat of categories) {

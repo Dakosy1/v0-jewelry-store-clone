@@ -23,6 +23,7 @@ export async function GET(request: Request) {
     const collection = searchParams.get('collection')
     const category = searchParams.get('category')
     const sale = searchParams.get('sale')
+    const men = searchParams.get('men')
 
     // Archived products stay visible on the site (shown as out-of-stock via
     // the isSold/inStock badge) instead of disappearing — only exclude
@@ -34,6 +35,7 @@ export async function GET(request: Request) {
     }
     if (category) where.categoryId = category
     if (sale === '1') where.oldPrice = { not: null }
+    if (men === '1') where.isMen = true
 
     const products = await prisma.product.findMany({
       where,
