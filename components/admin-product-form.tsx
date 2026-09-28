@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { adminFetch } from '@/lib/admin-fetch'
 
 type Category = { id: string; nameRu: string }
 type Collection = { id: string; nameRu: string }
@@ -114,7 +115,7 @@ export function ProductForm({
   const allStones = [...STONES, ...dbStones.map(s => ({ value: s.value, label: s.label }))]
 
   function reloadStones() {
-    fetch('/api/admin/stones').then(r => r.json()).then(setDbStones)
+    adminFetch('/api/admin/stones').then(r => r.json()).then(setDbStones)
   }
 
   useEffect(() => {
@@ -126,7 +127,7 @@ export function ProductForm({
   async function addStone() {
     if (!newStoneName.trim()) return
     setAddingStone(true)
-    const res = await fetch('/api/admin/stones', {
+    const res = await adminFetch('/api/admin/stones', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ label: newStoneName }),
@@ -146,7 +147,7 @@ export function ProductForm({
     setUploading(n => n + 1)
     const fd = new FormData()
     fd.append('file', file)
-    const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
+    const res = await adminFetch('/api/admin/upload', { method: 'POST', body: fd })
     const data = await res.json()
     setUploading(n => n - 1)
     if (data.url) setForm(f => ({ ...f, images: [...f.images, data.url] }))
@@ -177,7 +178,7 @@ export function ProductForm({
     const method = productId ? 'PUT' : 'POST'
 
     try {
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

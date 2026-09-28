@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AdminNavbar } from '@/components/admin-navbar'
 import Image from 'next/image'
+import { adminFetch } from '@/lib/admin-fetch'
 
 type Product = {
   id: string
@@ -24,7 +25,7 @@ export default function AdminDashboard() {
   const router = useRouter()
 
   async function load() {
-    const res = await fetch('/api/admin/products')
+    const res = await adminFetch('/api/admin/products')
     const data = await res.json()
     setProducts(Array.isArray(data) ? data : [])
     setLoading(false)
@@ -34,7 +35,7 @@ export default function AdminDashboard() {
 
   async function archive(id: string) {
     if (!confirm('Отправить товар в архив?')) return
-    await fetch(`/api/admin/products/${id}`, {
+    await adminFetch(`/api/admin/products/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'archived' }),
@@ -44,7 +45,7 @@ export default function AdminDashboard() {
 
   async function deleteProduct(id: string, name: string) {
     if (!confirm(`Удалить «${name}» навсегда?\n\nФотографии тоже будут удалены. Отменить нельзя.`)) return
-    await fetch(`/api/admin/products/${id}`, { method: 'DELETE' })
+    await adminFetch(`/api/admin/products/${id}`, { method: 'DELETE' })
     load()
   }
 

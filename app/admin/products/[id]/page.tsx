@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { AdminNavbar } from '@/components/admin-navbar'
 import { ProductForm } from '@/components/admin-product-form'
+import { adminFetch } from '@/lib/admin-fetch'
 
 export default function EditProductPage() {
   const { id } = useParams() as { id: string }
@@ -11,7 +12,7 @@ export default function EditProductPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch(`/api/admin/products/${id}`)
+    adminFetch(`/api/admin/products/${id}`)
       .then(r => r.json())
       .then(data => { setProduct(data); setLoading(false) })
   }, [id])

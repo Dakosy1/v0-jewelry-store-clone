@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { AdminNavbar } from '@/components/admin-navbar'
 import Image from 'next/image'
+import { adminFetch } from '@/lib/admin-fetch'
 
 type Product = {
   id: string
@@ -18,7 +19,7 @@ export default function ArchivePage() {
   const [loading, setLoading] = useState(true)
 
   async function load() {
-    const res = await fetch('/api/admin/archive')
+    const res = await adminFetch('/api/admin/archive')
     const data = await res.json()
     setProducts(Array.isArray(data) ? data : [])
     setLoading(false)
@@ -27,7 +28,7 @@ export default function ArchivePage() {
   useEffect(() => { load() }, [])
 
   async function restore(id: string) {
-    await fetch(`/api/admin/products/${id}`, {
+    await adminFetch(`/api/admin/products/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'active' }),
@@ -37,7 +38,7 @@ export default function ArchivePage() {
 
   async function deletePermanently(id: string) {
     if (!confirm('Удалить навсегда? Это действие нельзя отменить.')) return
-    await fetch(`/api/admin/products/${id}`, { method: 'DELETE' })
+    await adminFetch(`/api/admin/products/${id}`, { method: 'DELETE' })
     load()
   }
 
