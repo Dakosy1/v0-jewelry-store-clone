@@ -7,7 +7,7 @@ const secret = new TextEncoder().encode(
 export async function signToken() {
   return new SignJWT({ admin: true })
     .setProtectedHeader({ alg: 'HS256' })
-    .setExpirationTime('7d')
+    .setExpirationTime('30d')
     .sign(secret)
 }
 
