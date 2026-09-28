@@ -5,29 +5,30 @@ import { useT } from '@/locales'
 
 export function AnnouncementBar() {
   const [index, setIndex] = useState(0)
-  const [visible, setVisible] = useState(true)
   const t = useT()
   const messages = t.announcement
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setVisible(false)
-      setTimeout(() => {
-        setIndex((i) => (i + 1) % messages.length)
-        setVisible(true)
-      }, 400)
+      setIndex((i) => (i + 1) % messages.length)
     }, 4000)
     return () => clearInterval(interval)
   }, [messages.length])
 
+  // Каждая фраза — отдельный элемент в одной ячейке сетки, меняется только прозрачность.
+  // Если менять текст в одном элементе, WebView Instagram на iOS оставляет куски старой фразы.
   return (
-    <div className="h-9 bg-foreground text-background flex items-center justify-center overflow-hidden">
-      <p
-        className="text-[10px] tracking-[0.25em] font-sans uppercase transition-opacity duration-400"
-        style={{ opacity: visible ? 1 : 0 }}
-      >
-        {messages[index]}
-      </p>
+    <div className="h-9 bg-foreground text-background grid place-items-center overflow-hidden px-4">
+      {messages.map((message, i) => (
+        <p
+          key={i}
+          className="[grid-area:1/1] text-center text-[10px] leading-tight tracking-[0.25em] font-sans uppercase transition-opacity duration-400"
+          style={{ opacity: i === index ? 1 : 0 }}
+          aria-hidden={i !== index}
+        >
+          {message}
+        </p>
+      ))}
     </div>
   )
 }
