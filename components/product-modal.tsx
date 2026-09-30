@@ -71,7 +71,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
 
       {/* Modal */}
       <div
-        className="relative z-10 bg-background w-full max-w-3xl max-h-[90vh] overflow-y-auto grid md:grid-cols-2 shadow-2xl"
+        className="relative z-10 bg-background w-full max-w-3xl max-h-[90vh] overflow-y-auto flex flex-col md:grid md:grid-cols-2 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close */}
@@ -83,8 +83,8 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
           <X className="h-4 w-4" />
         </button>
 
-        {/* Image */}
-        <div className="relative aspect-square md:aspect-auto min-h-[300px] bg-secondary">
+        {/* Image — на телефоне колонка, а не grid: Safari неверно считает высоту строки grid с aspect-ratio, и фото наезжает на название */}
+        <div className="relative w-full shrink-0 aspect-square md:aspect-auto min-h-[300px] bg-secondary">
           <Image
             src={product.images[0]}
             alt={displayName}
