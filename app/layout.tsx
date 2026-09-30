@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Lora, Montserrat } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import { CartProvider } from '@/context/CartContext'
 import { LanguageProvider } from '@/context/LanguageContext'
 import { PageTransition } from '@/components/page-transition'
@@ -50,7 +49,6 @@ export default function RootLayout({
             <SocialFloat />
           </CartProvider>
         </LanguageProvider>
-        <Analytics />
       </body>
     </html>
   )
