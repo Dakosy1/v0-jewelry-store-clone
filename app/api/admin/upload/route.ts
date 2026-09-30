@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
+import { generateVariants } from '@/lib/image-variants-server'
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData()
@@ -35,6 +36,9 @@ export async function POST(request: NextRequest) {
   }
 
   await writeFile(path.join(uploadDir, filename), outputBuffer)
+
+  // Без копий сайт покажет оригинал, поэтому ошибка здесь не мешает загрузке
+  await generateVariants(filename).catch(err => console.error('[upload] thumbnails failed:', filename, err))
 
   return NextResponse.json({ url: `/uploads/${filename}` })
 }

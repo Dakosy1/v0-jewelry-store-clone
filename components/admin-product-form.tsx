@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { adminFetch } from '@/lib/admin-fetch'
+import { thumbUrl } from '@/lib/image-variants'
 
 type Category = { id: string; nameRu: string }
 type Collection = { id: string; nameRu: string }
@@ -392,7 +393,7 @@ export function ProductForm({
           {form.images.map(url => (
             <div key={url} className="relative w-24 h-24 rounded overflow-hidden bg-zinc-800 group">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={url} alt="" className="w-full h-full object-cover" />
+              <img src={thumbUrl(url, 400)} alt="" className="w-full h-full object-cover" />
               <button type="button" onClick={() => removeImage(url)}
                 className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs transition">
                 Удалить

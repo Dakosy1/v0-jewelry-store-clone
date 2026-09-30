@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { unlink } from 'fs/promises'
 import path from 'path'
+import { removeVariants } from '@/lib/image-variants-server'
 import { normalizeProductColors } from '@/lib/product-colors'
 
 function isValidBarcode(value: unknown): value is string {
@@ -35,6 +36,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const removed = oldImages.filter(img => img.startsWith('/uploads/') && !newImages.includes(img))
     for (const imgPath of removed) {
       await unlink(path.join(process.cwd(), 'public', imgPath)).catch(() => {})
+      await removeVariants(path.basename(imgPath))
     }
   }
 
@@ -96,6 +98,7 @@ export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id:
     if (imgPath.startsWith('/uploads/')) {
       const filePath = path.join(process.cwd(), 'public', imgPath)
       await unlink(filePath).catch(() => {}) // игнорируем если файл уже удалён
+      await removeVariants(path.basename(imgPath))
     }
   }
 

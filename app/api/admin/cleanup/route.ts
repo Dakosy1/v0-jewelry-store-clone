@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { unlink, readdir } from 'fs/promises'
 import path from 'path'
+import { removeVariants } from '@/lib/image-variants-server'
 
 export async function POST() {
   const uploadDir = path.join(process.cwd(), 'public', 'uploads')
@@ -9,7 +10,8 @@ export async function POST() {
   // Собираем все файлы в /uploads/
   let files: string[] = []
   try {
-    files = await readdir(uploadDir)
+    // Только файлы: папку с уменьшенными копиями (_thumbs) не трогаем
+    files = (await readdir(uploadDir, { withFileTypes: true })).filter(e => e.isFile()).map(e => e.name)
   } catch {
     return NextResponse.json({ deleted: 0, message: 'Папка uploads не найдена' })
   }
@@ -27,6 +29,7 @@ export async function POST() {
   for (const file of files) {
     if (!usedPaths.has(file)) {
       await unlink(path.join(uploadDir, file)).catch(() => {})
+      await removeVariants(file)
       deleted++
     }
   }

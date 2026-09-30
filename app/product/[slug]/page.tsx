@@ -11,6 +11,7 @@ import { useT } from '@/locales'
 import type { Product, ProductColor } from '@/types/product'
 import { useState, useEffect } from 'react'
 import { getProductColorLabel, getProductColorSwatch } from '@/lib/product-colors'
+import { thumbUrl } from '@/lib/image-variants'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -116,7 +117,7 @@ export default function ProductPage({ params }: Props) {
                                         className={`flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 relative overflow-hidden border-2 transition-all ${activeImage === i ? 'border-foreground' : 'border-transparent opacity-50 hover:opacity-80'}`}
                                     >
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={img} alt="" className="w-full h-full object-cover" />
+                                        <img src={thumbUrl(img, 400)} alt="" className="w-full h-full object-cover" />
                                     </button>
                                 ))}
                             </div>

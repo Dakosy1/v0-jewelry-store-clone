@@ -102,9 +102,11 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
                             В наличии нет
                         </p>
                     )}
-                    <p className="text-[10px] tracking-[0.25em] text-muted-foreground font-sans uppercase">
-                        {metalLabel} · {product.purity}
-                    </p>
+                    {(metalLabel || product.purity) && (
+                        <p className="text-[10px] tracking-[0.25em] text-muted-foreground font-sans uppercase">
+                            {[metalLabel, product.purity].filter(Boolean).join(' · ')}
+                        </p>
+                    )}
                     <p className="text-[10px] text-muted-foreground font-sans">
                         {t.product.barcode}: {product.barcode}
                     </p>
