@@ -20,7 +20,7 @@ export function ProductCard({ product, fullWidth, className }: ProductCardProps)
     const { addToCart } = useCart()
     const t = useT()
     const [modalOpen, setModalOpen] = useState(false)
-    const unavailable = product.status === 'archived' || product.inStock === false
+    const unavailable = product.status === 'archived' || product.inStock === false || product.isSold === true
 
     const formattedPrice = new Intl.NumberFormat('ru-KZ', {
         style: 'currency',

@@ -13,6 +13,7 @@ type Product = {
   price: number
   images: string[]
   inStock: boolean
+  isSold: boolean
   isNew: boolean
   isBestseller: boolean
   category: { nameRu: string } | null
@@ -106,8 +107,8 @@ return (
                     <td className="py-3 pr-4 text-zinc-300">{p.collection?.nameRu ?? '—'}</td>
                     <td className="py-3 pr-4 text-zinc-300">{p.price.toLocaleString('ru')} ₸</td>
                     <td className="py-3 pr-4">
-                      <span className={`text-[11px] px-2 py-1 rounded ${p.inStock ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}`}>
-                        {p.inStock ? 'Есть' : 'Нет'}
+                      <span className={`text-[11px] px-2 py-1 rounded ${p.isSold ? 'bg-zinc-700 text-zinc-300' : p.inStock ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}`}>
+                        {p.isSold ? 'Продан' : p.inStock ? 'Есть' : 'Нет'}
                       </span>
                     </td>
                     <td className="py-3">
